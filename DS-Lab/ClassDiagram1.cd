@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Deque&lt;T&gt;">
+    <Position X="1" Y="0.5" Width="2" />
+    <AssociationLine Name="front" Type="DequeNode&lt;T&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="3" Y="1.125" />
+        <Point X="4" Y="1.125" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="rear" Type="DequeNode&lt;T&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="3" Y="1.438" />
+        <Point X="4" Y="1.438" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AgBAAAAKABAAAAAEhAAACAUAAAEAAAIAAAACAABQAAA=</HashCode>
+      <FileName>Deque\Deque.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="front" />
+      <Field Name="rear" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="DequeNode&lt;T&gt;">
+    <Position X="4" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAgAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Deque\DequeNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MultiList&lt;T&gt;">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <AssociationLine Name="Root" Type="MultiListNode&lt;T&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="7.5" Y="1.5" />
+        <Point X="8.5" Y="1.5" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AABAAEAAAAAAECCEAAWAAAAAEAAAAAAAAAAAEERIABA=</HashCode>
+      <FileName>MultiList\MultiList.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Root" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MultiListNode&lt;T&gt;">
+    <Position X="8.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQBAAAAAAAAEIAEQAAEAAAIAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>MultiList\MultiListNode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
