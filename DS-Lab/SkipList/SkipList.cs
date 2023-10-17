@@ -26,21 +26,25 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         
         var levelPairPreviousNode = new Dictionary<int, SkipListNode<TKey, TValue>>();
 
+        for (int i = 0; i < Height; i++)
+        {
+            levelPairPreviousNode[i] = _emptyHead;
+        }
+
         for (int currentLevel = Height - 1; currentLevel >= 0; currentLevel--)
         {
-            var currentNode = _emptyHead[currentLevel];
+            var currentNode = _emptyHead;
 
             while (true)
             {
-                var node = currentNode[currentLevel];
-                
-                if (node == null || node.Key.CompareTo(key) > 0)
+                if (currentNode[currentLevel] == null || currentNode[currentLevel].Key.CompareTo(key) > 0)
                     break;
-
-                currentNode = node;
+                
+                currentNode = currentNode[currentLevel];
             }
-        
-            levelPairPreviousNode.Add(currentLevel, currentNode);
+
+            if (levelPairPreviousNode.ContainsKey(currentLevel)) levelPairPreviousNode[currentLevel] = currentNode;
+            else levelPairPreviousNode.Add(currentLevel, currentNode);
         }
 
         bool continueIncreaseLevel = true;

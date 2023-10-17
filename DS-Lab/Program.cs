@@ -8,7 +8,11 @@ public static class Program
 
     public static void Main()
     {
-        TestSkipList();
+        for (int i = 0; i < 10; i++)
+        {
+            TestSkipList();
+            Console.Write("\n\n\n");
+        }
         
         //TestDeque();
 
@@ -17,7 +21,7 @@ public static class Program
 
     private static void TestSkipList()
     {
-        var headNode = new SkipListNode<int, int>(0, 0);
+        var headNode = new SkipListNode<int, int>(int.MinValue, int.MinValue);
         var _2Node = new SkipListNode<int, int>(2, 2);
         var _3Node = new SkipListNode<int, int>(3, 3);
         var _5Node = new SkipListNode<int, int>(5, 5);
@@ -77,7 +81,7 @@ public static class Program
         
         Console.WriteLine(skipList);
         
-        skipList.Add(18, 18);
+        skipList.Add(21, 21);
         
         Console.WriteLine();
         
