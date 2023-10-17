@@ -42,6 +42,8 @@
     <ItemGroup>
         <Compile Include="Deque\Deque.cs" />
         <Compile Include="Deque\DequeNode.cs" />
+        <Compile Include="Extensions\Constants.cs" />
+        <Compile Include="Extensions\ExtensionsMethods.cs" />
         <Compile Include="MultiList\MultiList.cs" />
         <Compile Include="MultiList\MultiListNode.cs" />
         <Compile Include="Program.cs" />

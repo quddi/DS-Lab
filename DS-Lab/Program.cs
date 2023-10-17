@@ -8,11 +8,76 @@ public static class Program
 
     public static void Main()
     {
-        TestDeque();
+        TestSkipList();
+        
+        //TestDeque();
 
         //TestMultiList();
     }
 
+    private static void TestSkipList()
+    {
+        var headNode = new SkipListNode<int, int>(2, 2);
+        var _2Node = new SkipListNode<int, int>(2, 2);
+        var _3Node = new SkipListNode<int, int>(3, 3);
+        var _5Node = new SkipListNode<int, int>(5, 5);
+        var _6Node = new SkipListNode<int, int>(6, 6);
+        var _7Node = new SkipListNode<int, int>(7, 7);
+        var _8Node = new SkipListNode<int, int>(8, 8);
+        var _10Node = new SkipListNode<int, int>(10, 10);
+        var _12Node = new SkipListNode<int, int>(12, 12);
+        var _13Node = new SkipListNode<int, int>(13, 13);
+        var _15Node = new SkipListNode<int, int>(15, 15);
+        var _17Node = new SkipListNode<int, int>(17, 17);
+        var _19Node = new SkipListNode<int, int>(19, 19);
+        var _20Node = new SkipListNode<int, int>(20, 20);
+
+        _2Node[0] = _3Node;
+        _2Node[1] = _3Node;
+        _2Node[2] = _10Node;
+
+        _3Node[0] = _5Node;
+        _3Node[1] = _7Node;
+
+        _5Node[0] = _6Node;
+
+        _6Node[0] = _7Node;
+
+        _7Node[0] = _8Node;
+        _7Node[1] = _8Node;
+
+        _8Node[0] = _10Node;
+        _8Node[1] = _10Node;
+
+        _10Node[0] = _12Node;
+        _10Node[1] = _12Node;
+        _10Node[2] = _19Node;
+        _10Node[3] = _20Node;
+        
+        _12Node[0] = _13Node;
+        _12Node[1] = _15Node;
+        
+        _13Node[0] = _15Node;
+        
+        _15Node[0] = _17Node;
+        _15Node[1] = _19Node;
+        
+        _17Node[0] = _19Node;
+        
+        _19Node[0] = _20Node;
+        _19Node[1] = _20Node;
+        _19Node[2] = _20Node;
+
+        headNode[0] = _2Node;
+        headNode[1] = _2Node;
+        headNode[2] = _2Node;
+        headNode[3] = _10Node;
+
+        var skipList = new SkipList<int, int>(headNode);
+        
+        Console.WriteLine(skipList);
+    }
+    
     private static void TestDeque()
     {
         Deque.Clear();

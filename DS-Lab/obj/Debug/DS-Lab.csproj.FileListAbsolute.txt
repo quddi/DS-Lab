@@ -1,0 +1,6 @@
+C:\Users\alemk\source\repos\DS-Lab\DS-Lab\bin\Debug\DS_Lab_1.exe
+C:\Users\alemk\source\repos\DS-Lab\DS-Lab\bin\Debug\DS_Lab_1.pdb
+C:\Users\alemk\source\repos\DS-Lab\DS-Lab\obj\Debug\DS-Lab.csproj.AssemblyReference.cache
+C:\Users\alemk\source\repos\DS-Lab\DS-Lab\obj\Debug\DS-Lab.csproj.CoreCompileInputs.cache
+C:\Users\alemk\source\repos\DS-Lab\DS-Lab\obj\Debug\DS_Lab_1.exe
+C:\Users\alemk\source\repos\DS-Lab\DS-Lab\obj\Debug\DS_Lab_1.pdb

@@ -1,160 +1,124 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-public class SkipList<TKey, TValue> where TKey : IComparable<TKey>
+public class SkipList<TKey, TValue> where TKey : IComparable
 {
-    private int _currentLevel;
-    private SkipListNode<TKey, TValue> _head;
-    private Random _random = new();
+    private readonly int MaxHeight;
+    private readonly Random _random = new();
+    private SkipListNode<TKey, TValue> _emptyHead;
 
-    public int Count { get; private set; }
-    
-    public int MaxLevel { get; }
+    public int LevelsCount => _emptyHead.Next.Count;
 
-    public SkipList(int maxLevel)
+    public SkipList(int maxHeight = 16) : this(new SkipListNode<TKey, TValue>(default, default))
     {
-        MaxLevel = maxLevel;
-        _currentLevel = 1;
-        Count = 0;
-        _head = new SkipListNode<TKey, TValue>(default, default, MaxLevel);
+        MaxHeight = maxHeight;
     }
 
-    public SkipList() : this(3) { }
+    public SkipList(SkipListNode<TKey, TValue> emptyHead)
+    {
+        _emptyHead = emptyHead;
+    }
 
     public void Add(TKey key, TValue value)
     {
-        SkipListNode<TKey, TValue>[] update = new SkipListNode<TKey, TValue>[MaxLevel];
-        SkipListNode<TKey, TValue> current = _head;
+        var newNode = new SkipListNode<TKey, TValue>(key, value);
+        
+        var levelPairPreviousNode = new Dictionary<int, SkipListNode<TKey, TValue>>();
 
-        for (int i = _currentLevel - 1; i >= 0; i--)
+        for (int currentLevel = LevelsCount - 1; currentLevel >= 0; currentLevel--)
         {
-            while (current.Next[i] != null && current.Next[i].Key.CompareTo(key) < 0)
+            var currentNode = _emptyHead[currentLevel];
+
+            while (true)
             {
-                current = current.Next[i];
-            }
-            update[i] = current;
-        }
-
-        current = current.Next[0];
-
-        if (current == null || !current.Key.Equals(key))
-        {
-            int newLevel = GetNewNodeLevel();
-            if (newLevel > _currentLevel)
-            {
-                for (int i = _currentLevel; i < newLevel; i++)
-                {
-                    update[i] = _head;
-                }
-                _currentLevel = newLevel;
-            }
-
-            current = new SkipListNode<TKey, TValue>(key, value, newLevel);
-
-            for (int i = 0; i < newLevel; i++)
-            {
-                current.Next[i] = update[i].Next[i];
-                update[i].Next[i] = current;
-            }
-
-            Count++;
-        }
-        else
-        {
-            current.Value = value;
-        }
-    }
-
-    public bool TryGetValue(TKey key, out TValue value)
-    {
-        SkipListNode<TKey, TValue> current = _head;
-
-        for (int i = _currentLevel - 1; i >= 0; i--)
-        {
-            while (current.Next[i] != null && current.Next[i].Key.CompareTo(key) < 0)
-            {
-                current = current.Next[i];
-            }
-        }
-
-        current = current.Next[0];
-
-        if (current != null && current.Key.Equals(key))
-        {
-            value = current.Value;
-            return true;
-        }
-
-        value = default(TValue);
-        return false;
-    }
-
-    public bool Remove(TKey key)
-    {
-        SkipListNode<TKey, TValue>[] update = new SkipListNode<TKey, TValue>[MaxLevel];
-        SkipListNode<TKey, TValue> current = _head;
-
-        for (int i = _currentLevel - 1; i >= 0; i--)
-        {
-            while (current.Next[i] != null && current.Next[i].Key.CompareTo(key) < 0)
-            {
-                current = current.Next[i];
-            }
-            update[i] = current;
-        }
-
-        current = current.Next[0];
-
-        if (current != null && current.Key.Equals(key))
-        {
-            for (int i = 0; i < _currentLevel; i++)
-            {
-                if (update[i].Next[i] != current)
-                {
+                //TODO: currentNode.Next[currentLevel] == null?
+                if (currentNode.Next[currentLevel].Key.CompareTo(key) > 0)
                     break;
-                }
-                update[i].Next[i] = current.Next[i];
-            }
 
-            while (_currentLevel > 1 && _head.Next[_currentLevel - 1] == null)
-            {
-                _currentLevel--;
+                currentNode = currentNode.Next[currentLevel];
             }
-
-            Count--;
-            return true;
+        
+            levelPairPreviousNode.Add(currentLevel, currentNode);
         }
+
+        bool continueIncreaseLevel = true;
+
+        for (int level = 0; continueIncreaseLevel; level++)
+        {
+            var previousNode = levelPairPreviousNode[level];
+            
+            newNode.AddNext(previousNode.Next[level]);
+            
+            previousNode.Next[level] = newNode;
+            
+            continueIncreaseLevel = ExtensionsMethods.GetRandomSuccess(50);
+        }
+    }
+
+    public bool TryRemove(TKey key)
+    {
 
         return false;
     }
 
-    public SkipList<TKey, TValue> Clone()
+    public override string ToString()
     {
-        var clone = new SkipList<TKey, TValue>(MaxLevel);
-        SkipListNode<TKey, TValue> current = _head.Next[0];
+        var indexesList = new List<TKey>();
 
-        while (current != null)
+        var firstLevel = 0;
+        
+        var currentNode = _emptyHead[firstLevel];
+
+        while (currentNode != null)
         {
-            clone.Add(current.Key, current.Value);
-            current = current.Next[0];
+            indexesList.Add(currentNode.Key);
+
+            currentNode = currentNode[firstLevel];
         }
 
-        return clone;
-    }
-
-    public void Clear()
-    {
-        Count = 0;
-        _currentLevel = 1;
-        _head = new SkipListNode<TKey, TValue>(default(TKey), default(TValue), MaxLevel);
-    }
-
-    private int GetNewNodeLevel()
-    {
-        int level = 1;
-        while (level < MaxLevel && _random.NextDouble() < 0.5)
+        var mainStringBuilder = new StringBuilder();
+        var levelStringBuilder = new StringBuilder();
+        
+        for (int level = LevelsCount - 1; level >= firstLevel; level--)
         {
-            level++;
+            currentNode = _emptyHead[level];
+            levelStringBuilder.Append($"[{(level + 1).ToBeatifiedString()}]:");
+
+            foreach (var currentKey in indexesList)
+            {
+                levelStringBuilder.Append(Constants.SkipListSpacing);
+                if (currentNode == null || currentNode.Key.CompareTo(currentKey) != 0)
+                {
+                    levelStringBuilder.Append(Constants.SkipListSpacing);
+                }
+                else
+                {
+                    levelStringBuilder.Append(currentNode.Value.ToBeatifiedString());
+                    currentNode = currentNode[level];
+                }
+            }
+
+            mainStringBuilder.Append(levelStringBuilder);
+
+            if (level != 0)
+                mainStringBuilder.Append("\n");
+
+            levelStringBuilder.Clear();
         }
-        return level;
+
+        return mainStringBuilder.ToString();
+    }
+
+    private int RandomHeight()
+    {
+        int height = 1;
+        
+        while (_random.Next(2) == 0 && height < MaxHeight)
+        {
+            height++;
+        }
+        
+        return height;
     }
 }
