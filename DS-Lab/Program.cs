@@ -73,11 +73,11 @@ public static class Program
         headNode[2] = _2Node;
         headNode[3] = _10Node;
 
-        var skipList = new SkipList<int, int>(headNode);
+        var skipList = new SkipList<int, int>(headNode, 5);
         
         Console.WriteLine(skipList);
         
-        skipList.Add(21, 21);
+        skipList.Add(18, 18);
         
         Console.WriteLine();
         

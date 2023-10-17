@@ -4,20 +4,20 @@ using System.Text;
 
 public class SkipList<TKey, TValue> where TKey : IComparable
 {
+    private const int IncreaseLevelChance = 50;
     private readonly int MaxHeight;
-    private readonly Random _random = new();
+    private readonly Random Random = new();
+    
     private SkipListNode<TKey, TValue> _emptyHead;
 
-    public int LevelsCount => _emptyHead.ChildrenCount;
+    public int Height => _emptyHead.ChildrenCount;
 
-    public SkipList(int maxHeight = 16) : this(new SkipListNode<TKey, TValue>(default, default))
-    {
-        MaxHeight = maxHeight;
-    }
+    public SkipList() : this(new SkipListNode<TKey, TValue>(default, default)) { }
 
-    public SkipList(SkipListNode<TKey, TValue> emptyHead)
+    public SkipList(SkipListNode<TKey, TValue> emptyHead, int maxHeight = int.MaxValue)
     {
         _emptyHead = emptyHead;
+        MaxHeight = maxHeight;
     }
 
     public void Add(TKey key, TValue value)
@@ -26,7 +26,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         
         var levelPairPreviousNode = new Dictionary<int, SkipListNode<TKey, TValue>>();
 
-        for (int currentLevel = LevelsCount - 1; currentLevel >= 0; currentLevel--)
+        for (int currentLevel = Height - 1; currentLevel >= 0; currentLevel--)
         {
             var currentNode = _emptyHead[currentLevel];
 
@@ -45,15 +45,24 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 
         bool continueIncreaseLevel = true;
 
-        for (int level = 0; continueIncreaseLevel && level < _emptyHead.ChildrenCount; level++)
+        for (int level = 0; continueIncreaseLevel && level < MaxHeight; level++)
         {
-            var previousNode = levelPairPreviousNode[level];
+            if (level < Height)
+            {
+                var previousNode = levelPairPreviousNode[level];
             
-            newNode.AddNext(previousNode[level]);
+                newNode.AddNext(previousNode[level]);
             
-            previousNode[level] = newNode;
-            
-            continueIncreaseLevel = ExtensionsMethods.GetRandomSuccess(50);
+                previousNode[level] = newNode;
+            }
+            else
+            {
+                _emptyHead.AddNext(newNode);
+
+                newNode[level] = null;
+            }
+
+            continueIncreaseLevel = ExtensionsMethods.GetRandomSuccess(IncreaseLevelChance);
         }
     }
 
@@ -81,7 +90,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         var mainStringBuilder = new StringBuilder();
         var levelStringBuilder = new StringBuilder();
         
-        for (int level = LevelsCount - 1; level >= firstLevel; level--)
+        for (int level = Height - 1; level >= firstLevel; level--)
         {
             currentNode = _emptyHead[level];
             levelStringBuilder.Append($"[{(level + 1).ToBeatifiedString()}]:");
@@ -109,17 +118,5 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         }
 
         return mainStringBuilder.ToString();
-    }
-
-    private int RandomHeight()
-    {
-        int height = 1;
-        
-        while (_random.Next(2) == 0 && height < MaxHeight)
-        {
-            height++;
-        }
-        
-        return height;
     }
 }
