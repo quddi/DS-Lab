@@ -20,6 +20,21 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         MaxHeight = maxHeight;
     }
 
+    public bool Contains(TKey key)
+    {
+        var currentNode = _emptyHead[Constants.FirstLevel];
+
+        while (currentNode != null)
+        {
+            if (currentNode.Key.CompareTo(key) == 0) 
+                return true;
+
+            currentNode = currentNode[Constants.FirstLevel];
+        }
+
+        return false;
+    }
+
     public void Add(TKey key, TValue value)
     {
         var newNode = new SkipListNode<TKey, TValue>(key, value);
@@ -72,29 +87,61 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 
     public bool TryRemove(TKey key)
     {
+        if (!Contains(key)) 
+            return false;
 
-        return false;
+        var previousNodes = new List<SkipListNode<TKey, TValue>>();
+        var nextNodes = new List<SkipListNode<TKey, TValue>>();
+
+        for (int level = 0; level < Height; level++)
+        {
+            var currentNode = _emptyHead;
+
+            while (true)
+            {
+                if (currentNode[level] == null)
+                    goto LoopsEnd;
+
+                if (currentNode[level].Key.CompareTo(key) == 0)
+                {
+                    previousNodes.Add(currentNode);
+                    nextNodes.Add(currentNode[level][level]);
+                    break;
+                }
+
+                currentNode = currentNode[level];
+            }
+        }
+        
+        LoopsEnd:
+        if (previousNodes.Count != nextNodes.Count)
+            throw new($"Previous and nex nodes counts was different! ({previousNodes.Count} and {nextNodes.Count})");
+
+        for (int i = 0; i < previousNodes.Count; i++)
+        {
+            previousNodes[i][i] = nextNodes[i];
+        }
+        
+        return true;
     }
 
     public override string ToString()
     {
         var indexesList = new List<TKey>();
 
-        var firstLevel = 0;
-        
-        var currentNode = _emptyHead[firstLevel];
+        var currentNode = _emptyHead[Constants.FirstLevel];
 
         while (currentNode != null)
         {
             indexesList.Add(currentNode.Key);
 
-            currentNode = currentNode[firstLevel];
+            currentNode = currentNode[Constants.FirstLevel];
         }
 
         var mainStringBuilder = new StringBuilder();
         var levelStringBuilder = new StringBuilder();
         
-        for (int level = Height - 1; level >= firstLevel; level--)
+        for (int level = Height - 1; level >= Constants.FirstLevel; level--)
         {
             currentNode = _emptyHead[level];
             levelStringBuilder.Append($"[{(level + 1).ToBeatifiedString()}]:");

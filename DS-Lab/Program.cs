@@ -8,7 +8,7 @@ public static class Program
 
     public static void Main()
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1; i++)
         {
             TestSkipList();
             Console.Write("\n\n\n");
@@ -38,7 +38,7 @@ public static class Program
 
         _2Node[0] = _3Node;
         _2Node[1] = _3Node;
-        _2Node[2] = _10Node;
+        _2Node[2] = _8Node;
 
         _3Node[0] = _5Node;
         _3Node[1] = _7Node;
@@ -52,6 +52,7 @@ public static class Program
 
         _8Node[0] = _10Node;
         _8Node[1] = _10Node;
+        _8Node[2] = _10Node;
 
         _10Node[0] = _12Node;
         _10Node[1] = _12Node;
@@ -60,7 +61,7 @@ public static class Program
         
         _12Node[0] = _13Node;
         _12Node[1] = _15Node;
-        
+
         _13Node[0] = _15Node;
         
         _15Node[0] = _17Node;
@@ -79,11 +80,9 @@ public static class Program
 
         var skipList = new SkipList<int, int>(headNode, 5);
         
-        Console.WriteLine(skipList);
-        
-        skipList.Add(21, 21);
-        
-        Console.WriteLine();
+        Console.WriteLine(skipList + "\n");
+
+        Console.WriteLine(skipList.TryRemove(10) + "\n");
         
         Console.WriteLine(skipList);
     }
