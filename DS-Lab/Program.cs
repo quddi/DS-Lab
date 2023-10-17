@@ -8,7 +8,7 @@ public static class Program
 
     public static void Main()
     {
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 10; i++)
         {
             TestSkipList();
             Console.Write("\n\n\n");
@@ -82,7 +82,9 @@ public static class Program
         
         Console.WriteLine(skipList + "\n");
 
-        Console.WriteLine(skipList.TryRemove(10) + "\n");
+        skipList.Clear();
+        
+        skipList.Add(3, 3);
         
         Console.WriteLine(skipList);
     }

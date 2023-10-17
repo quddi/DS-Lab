@@ -125,6 +125,14 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         return true;
     }
 
+    public void Clear()
+    {
+        _emptyHead = new(_emptyHead.Key, _emptyHead.Value)
+        {
+            [0] = null
+        };
+    }
+
     public override string ToString()
     {
         var indexesList = new List<TKey>();
