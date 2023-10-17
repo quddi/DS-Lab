@@ -17,7 +17,7 @@ public static class Program
 
     private static void TestSkipList()
     {
-        var headNode = new SkipListNode<int, int>(2, 2);
+        var headNode = new SkipListNode<int, int>(0, 0);
         var _2Node = new SkipListNode<int, int>(2, 2);
         var _3Node = new SkipListNode<int, int>(3, 3);
         var _5Node = new SkipListNode<int, int>(5, 5);
@@ -74,6 +74,12 @@ public static class Program
         headNode[3] = _10Node;
 
         var skipList = new SkipList<int, int>(headNode);
+        
+        Console.WriteLine(skipList);
+        
+        skipList.Add(14, 14);
+        
+        Console.WriteLine();
         
         Console.WriteLine(skipList);
     }

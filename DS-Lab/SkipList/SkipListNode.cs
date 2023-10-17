@@ -29,9 +29,6 @@ public class SkipListNode<TKey, TValue> where TKey : IComparable
 
     public void AddNext(SkipListNode<TKey, TValue> node, int? position = null)
     {
-        if (Next.Any(nextNode => nextNode.Key.CompareTo(node.Key) == 0))
-            throw new ArgumentException($"There was already a node with {node.Key} key!");
-        
         if (position == null) Next.Add(node);
         else Next.Insert(position.Value, node);
     }

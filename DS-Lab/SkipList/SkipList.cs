@@ -32,11 +32,12 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 
             while (true)
             {
-                //TODO: currentNode.Next[currentLevel] == null?
-                if (currentNode.Next[currentLevel].Key.CompareTo(key) > 0)
+                var node = currentNode.Next[currentLevel];
+                
+                if (node == null || node.Key.CompareTo(key) > 0)
                     break;
 
-                currentNode = currentNode.Next[currentLevel];
+                currentNode = node;
             }
         
             levelPairPreviousNode.Add(currentLevel, currentNode);
@@ -44,7 +45,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 
         bool continueIncreaseLevel = true;
 
-        for (int level = 0; continueIncreaseLevel; level++)
+        for (int level = 0; continueIncreaseLevel && level < _emptyHead.ChildrenCount; level++)
         {
             var previousNode = levelPairPreviousNode[level];
             
