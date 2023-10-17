@@ -8,7 +8,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
     private readonly Random _random = new();
     private SkipListNode<TKey, TValue> _emptyHead;
 
-    public int LevelsCount => _emptyHead.Next.Count;
+    public int LevelsCount => _emptyHead.ChildrenCount;
 
     public SkipList(int maxHeight = 16) : this(new SkipListNode<TKey, TValue>(default, default))
     {
@@ -32,7 +32,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 
             while (true)
             {
-                var node = currentNode.Next[currentLevel];
+                var node = currentNode[currentLevel];
                 
                 if (node == null || node.Key.CompareTo(key) > 0)
                     break;
@@ -49,9 +49,9 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         {
             var previousNode = levelPairPreviousNode[level];
             
-            newNode.AddNext(previousNode.Next[level]);
+            newNode.AddNext(previousNode[level]);
             
-            previousNode.Next[level] = newNode;
+            previousNode[level] = newNode;
             
             continueIncreaseLevel = ExtensionsMethods.GetRandomSuccess(50);
         }

@@ -6,7 +6,7 @@ public class SkipListNode<TKey, TValue> where TKey : IComparable
 {
     public TKey Key { get; }
     public TValue Value { get; }
-    public List<SkipListNode<TKey, TValue>> Next { get; }
+    private List<SkipListNode<TKey, TValue>> Next { get; }
 
     public int ChildrenCount => Next.Count;
 

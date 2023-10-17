@@ -77,7 +77,7 @@ public static class Program
         
         Console.WriteLine(skipList);
         
-        skipList.Add(14, 14);
+        skipList.Add(21, 21);
         
         Console.WriteLine();
         
