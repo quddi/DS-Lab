@@ -133,6 +133,56 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         };
     }
 
+    public SkipList<TKey, TValue> Clone()
+    {
+        var allNodes = new List<SkipListNode<TKey, TValue>>();
+        var allNodesCopy = new Dictionary<TKey, SkipListNode<TKey, TValue>>();
+        
+        var newHead = new SkipListNode<TKey, TValue>(_emptyHead.Key, _emptyHead.Value);
+
+        var currentNode = _emptyHead[Constants.FirstLevel];
+
+        while (currentNode != null)
+        {
+            allNodes.Add(currentNode);
+            
+            allNodesCopy.Add(currentNode.Key, new SkipListNode<TKey, TValue>(currentNode.Key, currentNode.Value));
+
+            currentNode = currentNode[Constants.FirstLevel];
+        }
+
+        for (int level = 0; level < Height; level++)
+        {
+            if (_emptyHead[level] == null)
+            {
+                newHead[level] = null;
+                continue;
+            }
+
+            var nextNodeKey = _emptyHead[level].Key;
+
+            newHead[level] = allNodesCopy[nextNodeKey];
+        }
+
+        var currentRealNode = _emptyHead[Constants.FirstLevel];
+
+        while (currentRealNode != null)
+        {
+            var currentCopyNode = allNodesCopy[currentRealNode.Key];
+            
+            for (int level = 0; level < currentRealNode.ChildrenCount; level++)
+            {
+                var nextRealNode = currentRealNode[level];
+
+                currentCopyNode[level] = nextRealNode != null ? allNodesCopy[nextRealNode.Key] : null;
+            }
+            
+            currentRealNode = currentRealNode[Constants.FirstLevel];
+        }
+
+        return new SkipList<TKey, TValue>(newHead, MaxHeight);
+    }
+
     public override string ToString()
     {
         var indexesList = new List<TKey>();
