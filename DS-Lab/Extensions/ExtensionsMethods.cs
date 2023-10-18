@@ -21,6 +21,11 @@ public static class ExtensionsMethods
             return i / 10 == 0 ? string.Format($" {i}") : i.ToString();
         }
 
+        if (value is string str)
+        {
+            return str.Length == 1 ? str + " " : str;
+        } 
+
         return string.Empty;
     }
 

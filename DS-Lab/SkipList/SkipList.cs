@@ -11,7 +11,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
     private SkipListNode<TKey, TValue> _emptyHead;
 
     public int Height => _emptyHead.ChildrenCount;
-    private int MaxHeight => MaxHeightFormula(GetElementsCount());
+    public int MaxHeight => MaxHeightFormula(GetElementsCount());
 
     public SkipList() : this(new(),int.MaxValue) { }
 
@@ -124,6 +124,12 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         if (!Contains(key)) 
             return false;
 
+        if (GetElementsCount() == 1)
+        {
+            Clear();
+            return true;
+        }
+
         var previousNodes = new List<SkipListNode<TKey, TValue>>();
         var nextNodes = new List<SkipListNode<TKey, TValue>>();
 
@@ -219,6 +225,8 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 
     public override string ToString()
     {
+        if (GetElementsCount() == 0) return "Empty SkipList";
+        
         var indexesList = new List<TKey>();
 
         var currentNode = _emptyHead[Constants.FirstLevel];
@@ -247,7 +255,8 @@ public class SkipList<TKey, TValue> where TKey : IComparable
                 }
                 else
                 {
-                    levelStringBuilder.Append(currentNode.Value.ToBeatifiedString());
+                    var beatifiedString = currentNode.Value.ToBeatifiedString();
+                    levelStringBuilder.Append(beatifiedString);
                     currentNode = currentNode[level];
                 }
             }

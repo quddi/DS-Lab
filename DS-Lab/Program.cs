@@ -3,23 +3,129 @@
 public static class Program
 {
     private static readonly Deque<int> Deque = new();
+    
     private static readonly MultiList<int> MultiList = new();
     private static MultiList<int> MultiListCopy;
+    
+    private static readonly SkipList<int, string> SkipList = new();
+    private static SkipList<int, string> SkipListCopy;
 
     public static void Main()
     {
-        for (int i = 0; i < 1; i++)
+        for (var i = 0; i < 1; i++)
         {
             TestSkipList();
             Console.Write("\n\n\n");
         }
-        
+
         //TestDeque();
 
         //TestMultiList();
     }
 
     private static void TestSkipList()
+    {
+        SkipList.Clear();
+
+        while (true)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"SkipList (Max height = {SkipList.MaxHeight}):\n{SkipList}");
+            
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("SkipList copy: ");
+            Console.WriteLine(SkipListCopy == null ? "Empty SkipList" : SkipListCopy);
+            
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Choose an operation:");
+            Console.WriteLine("1. Add an element");
+            Console.WriteLine("2. Check if it contains a key");
+            Console.WriteLine("3. Remove an element");
+            Console.WriteLine("4. Clear the SkipList");
+            Console.WriteLine("5. Clone the SkipList");
+            Console.WriteLine("6. Exit");
+            
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            int choice;
+            
+            if (!int.TryParse(Console.ReadLine(), out choice))
+            {
+                Console.WriteLine("Invalid input. Please enter the operation number.");
+                continue;
+            }
+
+            if (choice == 1)
+            {
+                Console.Write("Enter a key (integer) to add: ");
+                if (int.TryParse(Console.ReadLine(), out int key))
+                {
+                    Console.Write("Enter a value (string) to associate with the key: ");
+                    var value = Console.ReadLine();
+
+                    Console.Write("Enter a value - new node height or something else, if you want it to be selected randomly: ");
+
+                    var result = int.TryParse(Console.ReadLine(), out int height);
+                    
+                    SkipList.Add(key, value, result ? height : null);
+
+                    Console.WriteLine($"Element ({key}, {value}) added to the SkipList.");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter an integer for the key.");
+                }
+            }
+            else if (choice == 2)
+            {
+                Console.Write("Enter a key to check if it exists: ");
+                if (int.TryParse(Console.ReadLine(), out var key))
+                {
+                    var containsKey = SkipList.Contains(key);
+                    Console.WriteLine($"SkipList contains key {key}: {containsKey}");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter an integer for the key.");
+                }
+            }
+            else if (choice == 3)
+            {
+                Console.Write("Enter a key to remove: ");
+                if (int.TryParse(Console.ReadLine(), out var key))
+                {
+                    var removed = SkipList.TryRemove(key);
+                    if (removed)
+                        Console.WriteLine($"Element with key {key} removed from the SkipList.");
+                    else
+                        Console.WriteLine($"Element with key {key} not found in the SkipList.");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter an integer for the key.");
+                }
+            }
+            else if (choice == 4)
+            {
+                SkipList.Clear();
+                Console.WriteLine("SkipList is cleared.");
+            }
+            else if (choice == 5)
+            {
+                SkipListCopy = SkipList.Clone();
+                Console.WriteLine("SkipList cloned successfully.");
+            }
+            else if (choice == 6)
+            {
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Invalid operation number. Please select a valid operation.");
+            }
+        }
+    }
+
+    private static void TestSkipListManually()
     {
         var headNode = new SkipListNode<int, int>(int.MinValue, int.MinValue);
         var _2Node = new SkipListNode<int, int>(2, 2);
@@ -58,17 +164,17 @@ public static class Program
         _10Node[1] = _12Node;
         _10Node[2] = _19Node;
         _10Node[3] = _20Node;
-        
+
         _12Node[0] = _13Node;
         _12Node[1] = _15Node;
 
         _13Node[0] = _15Node;
-        
+
         _15Node[0] = _17Node;
         _15Node[1] = _19Node;
-        
+
         _17Node[0] = _19Node;
-        
+
         _19Node[0] = _20Node;
         _19Node[1] = _20Node;
         _19Node[2] = _20Node;
@@ -79,40 +185,40 @@ public static class Program
         headNode[3] = _10Node;
 
         var skipList = new SkipList<int, int>(headNode, 5);
-        
+
         Console.WriteLine(skipList + "\n");
 
         //skipList.Clear();
-        
+
         //skipList.Add(3, 3);
-        
+
         Console.WriteLine(skipList);
-        
+
         Console.WriteLine("----------------");
 
         var copy = skipList.Clone();
-        
+
         Console.WriteLine(copy);
-        
+
         Console.WriteLine("----------------");
 
         skipList.TryRemove(10);
         skipList.Add(10, 10);
-        
+
         Console.WriteLine(skipList);
         Console.WriteLine(copy);
-        
+
         Console.WriteLine("----------------");
-        
+
         copy.Clear();
-        
+
         copy.Add(2, 2, 0);
         copy.Add(10, 10);
         copy.Add(5, 5);
-        
+
         Console.WriteLine(copy);
     }
-    
+
     private static void TestDeque()
     {
         Deque.Clear();
@@ -176,7 +282,7 @@ public static class Program
             {
                 try
                 {
-                    int removedItem = Deque.RemoveFront();
+                    var removedItem = Deque.RemoveFront();
                     Console.WriteLine("Removed element from the front: " + removedItem);
                 }
                 catch (InvalidOperationException)
@@ -188,7 +294,7 @@ public static class Program
             {
                 try
                 {
-                    int removedItem = Deque.RemoveRear();
+                    var removedItem = Deque.RemoveRear();
                     Console.WriteLine("Removed element from the rear: " + removedItem);
                 }
                 catch (InvalidOperationException)
@@ -200,7 +306,7 @@ public static class Program
             {
                 try
                 {
-                    int frontItem = Deque.PeekFront();
+                    var frontItem = Deque.PeekFront();
                     Console.WriteLine("Element from the front: " + frontItem);
                 }
                 catch (InvalidOperationException)
@@ -212,7 +318,7 @@ public static class Program
             {
                 try
                 {
-                    int rearItem = Deque.PeekRear();
+                    var rearItem = Deque.PeekRear();
                     Console.WriteLine("Element from the rear: " + rearItem);
                 }
                 catch (InvalidOperationException)
@@ -245,13 +351,9 @@ public static class Program
                 Console.Write("Enter an element to check if the deque contains it: ");
 
                 if (int.TryParse(Console.ReadLine(), out var itemToCheck))
-                {
                     Console.WriteLine($"Deque contains {itemToCheck}: {Deque.Contains(itemToCheck)}");
-                }
                 else
-                {
                     Console.WriteLine("Invalid input. Please enter an integer.");
-                }
             }
             else if (choice == 12)
             {
@@ -311,7 +413,7 @@ public static class Program
                 Console.Write("Enter the level number: ");
                 if (int.TryParse(Console.ReadLine(), out var levelNumber))
                 {
-                    int count = MultiList.CountNodesAmountAtLevel(levelNumber);
+                    var count = MultiList.CountNodesAmountAtLevel(levelNumber);
                     Console.WriteLine($"Number of elements at level {levelNumber}: {count}");
                 }
                 else
@@ -412,13 +514,9 @@ public static class Program
                 if (int.TryParse(Console.ReadLine(), out var branchRootValue))
                 {
                     if (MultiList.TryRemoveBranch(branchRootValue))
-                    {
                         Console.WriteLine($"Removed branch with root {branchRootValue} from the multi-list.");
-                    }
                     else
-                    {
                         Console.WriteLine($"Branch with root {branchRootValue} not found in the multi-list.");
-                    }
                 }
                 else
                 {
