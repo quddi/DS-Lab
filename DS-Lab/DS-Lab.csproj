@@ -12,7 +12,8 @@
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>11</LangVersion>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,6 +49,8 @@
         <Compile Include="MultiList\MultiListNode.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="RarefiedMatrix\RarefiedMatrix.cs" />
+        <Compile Include="RarefiedMatrix\RarefiedMatrixNode.cs" />
         <Compile Include="SkipList\SkipList.cs" />
         <Compile Include="SkipList\SkipListNode.cs" />
     </ItemGroup>
