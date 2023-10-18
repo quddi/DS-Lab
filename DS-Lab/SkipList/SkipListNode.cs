@@ -26,7 +26,9 @@ public class SkipListNode<TKey, TValue> where TKey : IComparable
         Value = value;
         Next = new List<SkipListNode<TKey, TValue>>();
     }
-    
+
+    public SkipListNode() : this(default, default) { }
+
     public void AddNext(SkipListNode<TKey, TValue> node, int? position = null)
     {
         if (position == null) Next.Add(node);

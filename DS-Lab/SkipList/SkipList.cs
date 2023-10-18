@@ -5,19 +5,44 @@ using System.Text;
 public class SkipList<TKey, TValue> where TKey : IComparable
 {
     private const int IncreaseLevelChance = 50;
-    private readonly int MaxHeight;
     private readonly Random Random = new();
+    private readonly Func<int, int> MaxHeightFormula; 
     
     private SkipListNode<TKey, TValue> _emptyHead;
 
     public int Height => _emptyHead.ChildrenCount;
+    private int MaxHeight => MaxHeightFormula(GetElementsCount());
 
-    public SkipList() : this(new SkipListNode<TKey, TValue>(default, default)) { }
+    public SkipList() : this(new(),int.MaxValue) { }
 
-    public SkipList(SkipListNode<TKey, TValue> emptyHead, int maxHeight = int.MaxValue)
+    public SkipList(SkipListNode<TKey, TValue> emptyHead, int maxHeight)
     {
         _emptyHead = emptyHead;
-        MaxHeight = maxHeight;
+        MaxHeightFormula = _ => maxHeight;
+    }
+    
+    public SkipList(SkipListNode<TKey, TValue> emptyHead, Func<int, int> maxHeightFormula)
+    {
+        _emptyHead = emptyHead;
+        MaxHeightFormula = maxHeightFormula;
+    }
+
+    public int GetElementsCount()
+    {
+        var currentNode = _emptyHead[Constants.FirstLevel];
+
+        if (currentNode == null) return 0;
+        
+        var count = 0;
+
+        while (currentNode != null)
+        {
+            count++;
+
+            currentNode = currentNode[Constants.FirstLevel];
+        }
+
+        return count;
     }
 
     public bool Contains(TKey key)
@@ -35,7 +60,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         return false;
     }
 
-    public void Add(TKey key, TValue value)
+    public void Add(TKey key, TValue value, int? height = null)
     {
         var newNode = new SkipListNode<TKey, TValue>(key, value);
         
@@ -62,9 +87,11 @@ public class SkipList<TKey, TValue> where TKey : IComparable
             else levelPairPreviousNode.Add(currentLevel, currentNode);
         }
 
-        bool continueIncreaseLevel = true;
+        if (height != null) height = ExtensionsMethods.Clamp(height.Value, 1, MaxHeight);
 
-        for (int level = 0; continueIncreaseLevel && level < MaxHeight; level++)
+        var shouldIncrease = true;
+        
+        for (int level = 0; shouldIncrease; level++)
         {
             if (level < Height)
             {
@@ -81,8 +108,15 @@ public class SkipList<TKey, TValue> where TKey : IComparable
                 newNode[level] = null;
             }
 
-            continueIncreaseLevel = ExtensionsMethods.GetRandomSuccess(IncreaseLevelChance);
+            shouldIncrease = ShouldIncreaseLevel(level, height);
         }
+    }
+
+    private bool ShouldIncreaseLevel(int level, int? height)
+    {
+        return height == null
+            ? ExtensionsMethods.GetRandomSuccess(IncreaseLevelChance) && level < MaxHeight
+            : level < height - 1;
     }
 
     public bool TryRemove(TKey key)
@@ -180,7 +214,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
             currentRealNode = currentRealNode[Constants.FirstLevel];
         }
 
-        return new SkipList<TKey, TValue>(newHead, MaxHeight);
+        return new SkipList<TKey, TValue>(newHead, MaxHeightFormula);
     }
 
     public override string ToString()

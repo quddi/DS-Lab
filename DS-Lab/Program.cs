@@ -101,6 +101,16 @@ public static class Program
         
         Console.WriteLine(skipList);
         Console.WriteLine(copy);
+        
+        Console.WriteLine("----------------");
+        
+        copy.Clear();
+        
+        copy.Add(2, 2, 0);
+        copy.Add(10, 10);
+        copy.Add(5, 5);
+        
+        Console.WriteLine(copy);
     }
     
     private static void TestDeque()
