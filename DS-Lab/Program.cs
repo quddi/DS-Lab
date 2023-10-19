@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public static class Program
 {
@@ -12,17 +13,52 @@ public static class Program
 
     public static void Main()
     {
-        for (var i = 0; i < 1; i++)
-        {
-            TestSkipList();
-            Console.Write("\n\n\n");
-        }
-
         //TestDeque();
 
         //TestMultiList();
+        
+        //TestSkipList();
+        
+        TestRarefiedMatrixManually();
     }
 
+    private static void TestRarefiedMatrixManually()
+    {
+        var node1 = new RarefiedMatrixNode { Key = 1, Value = 1 };
+        var node2 = new RarefiedMatrixNode { Key = 2, Value = 2 };
+        var node3 = new RarefiedMatrixNode { Key = 3, Value = 3 };
+        var node4 = new RarefiedMatrixNode { Key = 4, Value = 4 };
+        var node7 = new RarefiedMatrixNode { Key = 17, Value = 17 };
+        var node8 = new RarefiedMatrixNode { Key = 18, Value = 18 };
+        var node9 = new RarefiedMatrixNode { Key = 9, Value = 9 };
+
+        node1.RightNode = node2;
+        node3.RightNode = node8;
+        node4.RightNode = node7;
+        node7.RightNode = node9;
+
+        node3.DownNode = node4;
+        node1.DownNode = node8;
+        node2.DownNode = node9;
+
+        var upList = new List<RarefiedMatrixNode>();
+        
+        upList.Add(node3);
+        upList.Add(node1);
+        upList.Add(node7);
+        upList.Add(node2);
+
+        var leftList = new List<RarefiedMatrixNode>();
+        
+        leftList.Add(node1);
+        leftList.Add(node3);
+        leftList.Add(node4);
+
+        var rarefiedMatrix = new RarefiedMatrix(upList, leftList);
+        
+        Console.WriteLine(rarefiedMatrix);
+    }
+    
     private static void TestSkipList()
     {
         SkipList.Clear();

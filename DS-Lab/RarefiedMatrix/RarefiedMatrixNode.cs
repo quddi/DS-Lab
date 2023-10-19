@@ -1,5 +1,7 @@
 ﻿public class RarefiedMatrixNode
 {
+    public int Key { get; set; }
+    
     public int Value { get; set; }
     
     public RarefiedMatrixNode? RightNode { get; set; }
