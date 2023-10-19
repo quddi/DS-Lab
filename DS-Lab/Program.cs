@@ -28,8 +28,8 @@ public static class Program
         var node2 = new RarefiedMatrixNode { Key = 2, Value = 2 };
         var node3 = new RarefiedMatrixNode { Key = 3, Value = 3 };
         var node4 = new RarefiedMatrixNode { Key = 4, Value = 4 };
-        var node7 = new RarefiedMatrixNode { Key = 17, Value = 17 };
-        var node8 = new RarefiedMatrixNode { Key = 18, Value = 18 };
+        var node7 = new RarefiedMatrixNode { Key = 7, Value = 7 };
+        var node8 = new RarefiedMatrixNode { Key = 8, Value = 8 };
         var node9 = new RarefiedMatrixNode { Key = 9, Value = 9 };
 
         node1.RightNode = node2;
@@ -38,13 +38,13 @@ public static class Program
         node7.RightNode = node9;
 
         node3.DownNode = node4;
-        node1.DownNode = node8;
+        node1.DownNode = node3;
         node2.DownNode = node9;
 
         var upList = new List<RarefiedMatrixNode>();
         
-        upList.Add(node3);
         upList.Add(node1);
+        upList.Add(node8);
         upList.Add(node7);
         upList.Add(node2);
 
@@ -57,6 +57,15 @@ public static class Program
         var rarefiedMatrix = new RarefiedMatrix(upList, leftList);
         
         Console.WriteLine(rarefiedMatrix);
+        Console.WriteLine();
+        rarefiedMatrix.ToDefaultMatrix().Print();
+        Console.WriteLine();
+        
+        rarefiedMatrix.SetValue(0, 0, 11, 11);
+        
+        Console.WriteLine(rarefiedMatrix);
+        Console.WriteLine();
+        rarefiedMatrix.ToDefaultMatrix().Print();
     }
     
     private static void TestSkipList()
