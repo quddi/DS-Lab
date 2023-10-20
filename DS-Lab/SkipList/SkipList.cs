@@ -4,7 +4,7 @@ using System.Text;
 
 public class SkipList<TKey, TValue> where TKey : IComparable
 {
-    private const int IncreaseLevelChance = 50;
+    private const int IncreaseLevelChance = 70;
     private readonly Random Random = new();
     private readonly Func<int, int> MaxHeightFormula; 
     
@@ -13,7 +13,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
     public int Height => _emptyHead.ChildrenCount;
     public int MaxHeight => MaxHeightFormula(GetElementsCount());
 
-    public SkipList() : this(new(),int.MaxValue) { }
+    public SkipList() : this(new(),10) { }
 
     public SkipList(SkipListNode<TKey, TValue> emptyHead, int maxHeight)
     {
@@ -47,14 +47,27 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 
     public bool Contains(TKey key)
     {
-        var currentNode = _emptyHead[Constants.FirstLevel];
+        var currentLevel = Height - 1;
+        
+        var currentNode = _emptyHead;
 
-        while (currentNode != null)
+        while (currentLevel >= 0)
         {
-            if (currentNode.Key.CompareTo(key) == 0) 
-                return true;
+            if (currentNode[currentLevel] != null)
+            {
+                var compareResult = key.CompareTo(currentNode[currentLevel].Key);
+            
+                if (compareResult == 0)
+                    return true;
+            
+                if (compareResult > 0)
+                {
+                    currentNode = currentNode[currentLevel];
+                    continue;
+                }
+            }
 
-            currentNode = currentNode[Constants.FirstLevel];
+            currentLevel--;
         }
 
         return false;

@@ -17,9 +17,9 @@ public static class Program
 
         //TestMultiList();
         
-        //TestSkipList();
+        TestSkipList();
         
-        TestRarefiedMatrixManually();
+        //TestRarefiedMatrixManually();
     }
 
     private static void TestRarefiedMatrixManually()
@@ -75,7 +75,7 @@ public static class Program
         while (true)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"SkipList (Max height = {SkipList.MaxHeight}):\n{SkipList}");
+            Console.WriteLine($"SkipList:\n{SkipList}");
             
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("SkipList copy: ");
