@@ -74,4 +74,32 @@ public static class ExtensionsMethods
 
         return false;
     }
+
+    public static int[,] GetRandomMatrix(int rows, int columns, int minValue = -99, int maxValue = 99)
+    {
+        var result = new int[rows, columns];
+
+        var usedValues = new HashSet<int>();
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                if (GetRandomSuccess(50))
+                {
+                    result[i, j] = 0;
+                    continue;
+                }
+
+                var randomValue = Random.Next(minValue, maxValue + 1);
+                
+                while (usedValues.Contains(randomValue))
+                    randomValue = Random.Next(minValue, maxValue + 1);
+
+                result[i, j] = randomValue;
+            }
+        }
+
+        return result;
+    } 
 }

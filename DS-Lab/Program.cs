@@ -58,12 +58,7 @@ public static class Program
 
         var rarefiedMatrix = new RarefiedMatrix();
         
-        rarefiedMatrix.FromDefaultMatrix(new int[,]
-        {
-            {0, 0, 0},
-            {0, 0, 0},
-            {0, 0, 0}
-        });
+        rarefiedMatrix.FromDefaultMatrix(ExtensionsMethods.GetRandomMatrix(3, 5));
         
         Console.WriteLine(rarefiedMatrix);
         rarefiedMatrix.ToDefaultMatrix().Print();
