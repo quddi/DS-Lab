@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public static class ExtensionsMethods
 {
@@ -49,5 +50,28 @@ public static class ExtensionsMethods
             Console.WriteLine();
             Console.WriteLine();
         }
+    }
+
+    public static bool ContainsCopies<T>(this T[,] arr, HashSet<T> except)
+    {
+        var foundValues = new HashSet<T>();
+
+        var rows = arr.GetLength(0);
+        var columns = arr.GetLength(1);
+        
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                var value = arr[i, j];
+                
+                if (!except.Contains(value) &&foundValues.Contains(value))
+                    return true;
+
+                foundValues.Add(value);
+            }
+        }
+
+        return false;
     }
 }

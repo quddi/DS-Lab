@@ -24,7 +24,7 @@ public static class Program
 
     private static void TestRarefiedMatrixManually()
     {
-        var node1 = new RarefiedMatrixNode { Key = 1, Value = 1 };
+        /*var node1 = new RarefiedMatrixNode { Key = 1, Value = 1 };
         var node2 = new RarefiedMatrixNode { Key = 2, Value = 2 };
         var node3 = new RarefiedMatrixNode { Key = 3, Value = 3 };
         var node4 = new RarefiedMatrixNode { Key = 4, Value = 4 };
@@ -54,7 +54,19 @@ public static class Program
         leftList.Add(node3);
         leftList.Add(node4);
 
-        var rarefiedMatrix = new RarefiedMatrix(upList, leftList);
+        var rarefiedMatrix = new RarefiedMatrix(upList, leftList);*/
+
+        var rarefiedMatrix = new RarefiedMatrix();
+        
+        rarefiedMatrix.FromDefaultMatrix(new int[,]
+        {
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0}
+        });
+        
+        Console.WriteLine(rarefiedMatrix);
+        rarefiedMatrix.ToDefaultMatrix().Print();
         
         rarefiedMatrix.SetValue(0, 1, 11, 11);
         Console.WriteLine(rarefiedMatrix);

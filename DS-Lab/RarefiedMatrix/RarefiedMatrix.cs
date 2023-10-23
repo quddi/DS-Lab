@@ -11,7 +11,7 @@ public class RarefiedMatrix
     public int Rows => _leftNodesList.Count;
     public int Columns => _upNodesList.Count;
     
-    public RarefiedMatrix(int rows, int columns)
+    public RarefiedMatrix(int rows = 0, int columns = 0)
     {
         _leftNodesList = new(rows);
         _upNodesList = new(columns);
@@ -193,6 +193,46 @@ public class RarefiedMatrix
         }
 
         return result;
+    }
+
+    public void FromDefaultMatrix(int[,] matrix)
+    {
+        Clear();
+        Resize(matrix.GetLength(0), matrix.GetLength(1));
+
+        if (matrix.ContainsCopies(new HashSet<int> { 0 }))
+            throw new ArgumentException("All values of the source matrix must be unique, but they were not!");
+        
+        var previousUpNodes = new List<RarefiedMatrixNode>(Enumerable.Repeat<RarefiedMatrixNode>(null!, _upNodesList.Count));
+
+        for (int row = 0; row < Rows; row++)
+        {
+            RarefiedMatrixNode? previousLeftNode = null;
+
+            for (int column = 0; column < Columns; column++)
+            {
+                if (matrix[row, column] == 0)
+                    continue;
+
+                var previousUpNode = previousUpNodes[column];
+                
+                var newNode = new RarefiedMatrixNode
+                {
+                    Key = matrix[row, column],
+                    Value = matrix[row, column],
+                };
+
+                if (previousLeftNode == null) _leftNodesList[row] = newNode;
+                else previousLeftNode.RightNode = newNode;
+
+                previousLeftNode = newNode;
+                
+                if (previousUpNode == null) _upNodesList[column] = newNode;
+                else previousUpNode.DownNode = newNode;
+
+                previousUpNodes[column] = newNode;
+            }
+        }
     }
 
     public override string ToString()
