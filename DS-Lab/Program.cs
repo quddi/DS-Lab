@@ -64,8 +64,10 @@ public static class Program
         
         rarefiedMatrix.Resize(5,5);
         rarefiedMatrix.SetValue(0, 0, 11, 0);
-        rarefiedMatrix.SetValue(0, 1, 11, 0);
-        
+        //rarefiedMatrix.SetValue(0, 1, 11, 0);
+        rarefiedMatrix *= 0;
+        rarefiedMatrix *= 2;
+
         Console.WriteLine(rarefiedMatrix);
         Console.WriteLine();
         rarefiedMatrix.ToDefaultMatrix().Print();

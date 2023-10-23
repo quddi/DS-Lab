@@ -158,6 +158,12 @@ public class RarefiedMatrix
             _leftNodesList = _leftNodesList.Take(newRowsCount).ToList();
     }
 
+    public void Clear()
+    {
+        _upNodesList = new List<RarefiedMatrixNode>(Enumerable.Repeat<RarefiedMatrixNode>(null!, _upNodesList.Count));
+        _leftNodesList = new List<RarefiedMatrixNode>(Enumerable.Repeat<RarefiedMatrixNode>(null!, _leftNodesList.Count));
+    }
+
     public int[,] ToDefaultMatrix()
     {
         if (Rows == 0 || Columns == 0) return new int[0, 0];
@@ -226,5 +232,32 @@ public class RarefiedMatrix
         }
 
         return mainStringBuilder.ToString();
+    }
+    
+    public static RarefiedMatrix operator *(RarefiedMatrix rarefiedMatrix, int value)
+    {
+        if (value == 1)
+            return rarefiedMatrix;
+        
+        if (value == 0)
+        {
+            rarefiedMatrix.Clear();
+
+            return rarefiedMatrix;
+        }
+
+        for (var i = 0; i < rarefiedMatrix._upNodesList.Count; i++)
+        {
+            var currentUpNode = rarefiedMatrix._upNodesList[i];
+            
+            while (currentUpNode != null)
+            {
+                currentUpNode.Value *= value;
+
+                currentUpNode = currentUpNode.DownNode;
+            }
+        }
+
+        return rarefiedMatrix;
     }
 }
