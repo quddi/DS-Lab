@@ -6,21 +6,23 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 {
     private const int IncreaseLevelChance = 70;
     private readonly Random Random = new();
-    private readonly Func<int, int> MaxHeightFormula; 
-    
+    private readonly Func<int, int> MaxHeightFormula;
+
     private SkipListNode<TKey, TValue> _emptyHead;
 
     public int Height => _emptyHead.ChildrenCount;
     public int MaxHeight => MaxHeightFormula(GetElementsCount());
 
-    public SkipList() : this(new(),10) { }
+    public SkipList() : this(new(), 10)
+    {
+    }
 
     public SkipList(SkipListNode<TKey, TValue> emptyHead, int maxHeight)
     {
         _emptyHead = emptyHead;
         MaxHeightFormula = _ => maxHeight;
     }
-    
+
     public SkipList(SkipListNode<TKey, TValue> emptyHead, Func<int, int> maxHeightFormula)
     {
         _emptyHead = emptyHead;
@@ -32,7 +34,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         var currentNode = _emptyHead[Constants.FirstLevel];
 
         if (currentNode == null) return 0;
-        
+
         var count = 0;
 
         while (currentNode != null)
@@ -48,7 +50,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
     public bool Contains(TKey key)
     {
         var currentLevel = Height - 1;
-        
+
         var currentNode = _emptyHead;
 
         while (currentLevel >= 0)
@@ -56,10 +58,10 @@ public class SkipList<TKey, TValue> where TKey : IComparable
             if (currentNode[currentLevel] != null)
             {
                 var compareResult = key.CompareTo(currentNode[currentLevel].Key);
-            
+
                 if (compareResult == 0)
                     return true;
-            
+
                 if (compareResult > 0)
                 {
                     currentNode = currentNode[currentLevel];
@@ -76,7 +78,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
     public void Add(TKey key, TValue value, int? height = null)
     {
         var newNode = new SkipListNode<TKey, TValue>(key, value);
-        
+
         var levelPairPreviousNode = new Dictionary<int, SkipListNode<TKey, TValue>>();
 
         for (int i = 0; i < Height; i++)
@@ -92,7 +94,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
             {
                 if (currentNode[currentLevel] == null || currentNode[currentLevel].Key.CompareTo(key) > 0)
                     break;
-                
+
                 currentNode = currentNode[currentLevel];
             }
 
@@ -103,15 +105,15 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         if (height != null) height = ExtensionsMethods.Clamp(height.Value, 1, MaxHeight);
 
         var shouldIncrease = true;
-        
+
         for (int level = 0; shouldIncrease; level++)
         {
             if (level < Height)
             {
                 var previousNode = levelPairPreviousNode[level];
-            
+
                 newNode.AddNext(previousNode[level]);
-            
+
                 previousNode[level] = newNode;
             }
             else
@@ -134,7 +136,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 
     public bool TryRemove(TKey key)
     {
-        if (!Contains(key)) 
+        if (!Contains(key))
             return false;
 
         if (GetElementsCount() == 1)
@@ -165,7 +167,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
                 currentNode = currentNode[level];
             }
         }
-        
+
         LoopsEnd:
         if (previousNodes.Count != nextNodes.Count)
             throw new($"Previous and nex nodes counts was different! ({previousNodes.Count} and {nextNodes.Count})");
@@ -174,7 +176,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         {
             previousNodes[i][i] = nextNodes[i];
         }
-        
+
         return true;
     }
 
@@ -190,7 +192,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
     {
         var allNodes = new List<SkipListNode<TKey, TValue>>();
         var allNodesCopy = new Dictionary<TKey, SkipListNode<TKey, TValue>>();
-        
+
         var newHead = new SkipListNode<TKey, TValue>(_emptyHead.Key, _emptyHead.Value);
 
         var currentNode = _emptyHead[Constants.FirstLevel];
@@ -198,7 +200,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         while (currentNode != null)
         {
             allNodes.Add(currentNode);
-            
+
             allNodesCopy.Add(currentNode.Key, new SkipListNode<TKey, TValue>(currentNode.Key, currentNode.Value));
 
             currentNode = currentNode[Constants.FirstLevel];
@@ -222,14 +224,14 @@ public class SkipList<TKey, TValue> where TKey : IComparable
         while (currentRealNode != null)
         {
             var currentCopyNode = allNodesCopy[currentRealNode.Key];
-            
+
             for (int level = 0; level < currentRealNode.ChildrenCount; level++)
             {
                 var nextRealNode = currentRealNode[level];
 
                 currentCopyNode[level] = nextRealNode != null ? allNodesCopy[nextRealNode.Key] : null;
             }
-            
+
             currentRealNode = currentRealNode[Constants.FirstLevel];
         }
 
@@ -239,7 +241,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
     public override string ToString()
     {
         if (GetElementsCount() == 0) return "Empty SkipList";
-        
+
         var indexesList = new List<TKey>();
 
         var currentNode = _emptyHead[Constants.FirstLevel];
@@ -253,7 +255,7 @@ public class SkipList<TKey, TValue> where TKey : IComparable
 
         var mainStringBuilder = new StringBuilder();
         var levelStringBuilder = new StringBuilder();
-        
+
         for (int level = Height - 1; level >= Constants.FirstLevel; level--)
         {
             currentNode = _emptyHead[level];

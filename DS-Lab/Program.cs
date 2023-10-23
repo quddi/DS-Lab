@@ -17,9 +17,9 @@ public static class Program
 
         //TestMultiList();
         
-        TestSkipList();
+        //TestSkipList();
         
-        //TestRarefiedMatrixManually();
+        TestRarefiedMatrixManually();
     }
 
     private static void TestRarefiedMatrixManually()
@@ -61,8 +61,14 @@ public static class Program
         rarefiedMatrix.ToDefaultMatrix().Print();
         Console.WriteLine();
         
-        rarefiedMatrix.SetValue(0, 0, 11, 11);
+        rarefiedMatrix.Resize(5,5);
+        rarefiedMatrix.SetValue(4, 4, 11, 11);
         
+        Console.WriteLine(rarefiedMatrix);
+        Console.WriteLine();
+        rarefiedMatrix.ToDefaultMatrix().Print();
+        
+        rarefiedMatrix.Resize(3,3);
         Console.WriteLine(rarefiedMatrix);
         Console.WriteLine();
         rarefiedMatrix.ToDefaultMatrix().Print();

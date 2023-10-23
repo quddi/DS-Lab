@@ -69,7 +69,7 @@ public class RarefiedMatrix
                 {
                     previousUpNodes[currentColumn] = nextUpNodes[currentColumn];
 
-                    nextUpNodes[currentColumn] = nextUpNodes[currentColumn].DownNode;
+                    nextUpNodes[currentColumn] = nextUpNodes[currentColumn]?.DownNode;
                     
                     continue;
                 }
@@ -79,7 +79,7 @@ public class RarefiedMatrix
 
                     previousLeftNode = nextLeftNode;
 
-                    nextLeftNode = nextLeftNode.RightNode;
+                    nextLeftNode = nextLeftNode?.RightNode;
                     
                     continue;
                 }
@@ -101,8 +101,31 @@ public class RarefiedMatrix
         }
     }
 
+    public void Resize(int newRowsCount, int newColumnsCount)
+    {
+        if (newRowsCount == 0 || newColumnsCount == 0)
+        {
+            _upNodesList.Clear();
+            _leftNodesList.Clear();
+            
+            return;
+        }
+
+        if (newColumnsCount > Columns)
+            _upNodesList.AddRange(Enumerable.Repeat<RarefiedMatrixNode>(null!, newColumnsCount - Columns));
+        else
+            _upNodesList = _upNodesList.Take(newColumnsCount).ToList();
+
+        if (newRowsCount > Rows)
+            _leftNodesList.AddRange(Enumerable.Repeat<RarefiedMatrixNode>(null!, newRowsCount - Rows));
+        else
+            _leftNodesList = _leftNodesList.Take(newRowsCount).ToList();
+    }
+
     public int[,] ToDefaultMatrix()
     {
+        if (Rows == 0 || Columns == 0) return new int[0, 0];
+        
         var upNodes = new List<RarefiedMatrixNode>(_upNodesList);
 
         var result = new int[Rows, Columns];
@@ -132,6 +155,9 @@ public class RarefiedMatrix
 
     public override string ToString()
     {
+        if (Rows == 0 || Columns == 0)
+            return "Empty rarefied matrix"; 
+        
         var mainStringBuilder = new StringBuilder();
         var currentStringBuilder = new StringBuilder();
 
