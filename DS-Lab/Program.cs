@@ -56,19 +56,16 @@ public static class Program
 
         var rarefiedMatrix = new RarefiedMatrix(upList, leftList);
         
+        rarefiedMatrix.SetValue(0, 1, 11, 11);
         Console.WriteLine(rarefiedMatrix);
         Console.WriteLine();
         rarefiedMatrix.ToDefaultMatrix().Print();
         Console.WriteLine();
         
         rarefiedMatrix.Resize(5,5);
-        rarefiedMatrix.SetValue(4, 4, 11, 11);
+        rarefiedMatrix.SetValue(0, 0, 11, 0);
+        rarefiedMatrix.SetValue(0, 1, 11, 0);
         
-        Console.WriteLine(rarefiedMatrix);
-        Console.WriteLine();
-        rarefiedMatrix.ToDefaultMatrix().Print();
-        
-        rarefiedMatrix.Resize(3,3);
         Console.WriteLine(rarefiedMatrix);
         Console.WriteLine();
         rarefiedMatrix.ToDefaultMatrix().Print();

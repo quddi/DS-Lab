@@ -25,6 +25,12 @@ public class RarefiedMatrix
 
     public void SetValue(int row, int column, int key, int value)
     {
+        if (row >= Rows || row < 0)
+            throw new ArgumentException($"Row parameter was {row} but must be [0; {Rows - 1}]");
+        
+        if (column >= Columns)
+            throw new ArgumentException($"Column parameter was {column} but must be [0; {Columns - 1}]");
+        
         var nextUpNodes = new List<RarefiedMatrixNode>(_upNodesList);
         var previousUpNodes = _upNodesList.Select(_ => (RarefiedMatrixNode)null!).ToList();
         
@@ -41,12 +47,42 @@ public class RarefiedMatrix
                         nextLeftNode.Key == nextUpNodes[currentColumn].Key)
                     {
                         var existingNode = nextLeftNode;
+                        
+                        if (value != 0)
+                        {
+                            existingNode.Key = key;
+                            existingNode.Value = value;
+                        }
+                        else
+                        {
+                            var newNextUpNode = existingNode.DownNode;
 
-                        existingNode.Key = key;
-                        existingNode.Value = value;
+                            var newNextLeftNode = existingNode.RightNode;
+
+                            if (previousLeftNode != null)
+                            {
+                                previousLeftNode.RightNode = newNextLeftNode;
+
+                                if (previousUpNodes[column] == null)
+                                    _upNodesList[column] = nextLeftNode.DownNode!;
+                            }
+                            else
+                            {
+                                if (previousUpNodes[column] != null)
+                                    previousUpNodes[column].DownNode = nextUpNodes[column]?.DownNode;
+                                else 
+                                    _upNodesList[column] = _upNodesList[column]?.DownNode!;
+                                
+                                _leftNodesList[row] = _leftNodesList[row]?.RightNode!;
+                            }
+                            
+                            nextUpNodes[currentColumn].DownNode = newNextUpNode;
+                        }
                     }
                     else
                     {
+                        if (value == 0) return;
+                        
                         var newNode = new RarefiedMatrixNode
                         {
                             Key = key,
