@@ -235,6 +235,27 @@ public class RarefiedMatrix
         }
     }
 
+    public void Transpose()
+    {
+        var allNodes = new List<RarefiedMatrixNode>();
+
+        for (var i = 0; i < _upNodesList.Count; i++)
+        {
+            var currentNode = _upNodesList[i];
+
+            while (currentNode != null)
+            {
+                allNodes.Add(currentNode);
+
+                currentNode = currentNode.DownNode;
+            }
+        }
+        
+        allNodes.ForEach(node => node.SwapNextNodes());
+
+        (_upNodesList, _leftNodesList) = (_leftNodesList, _upNodesList);
+    }
+
     public override string ToString()
     {
         if (Rows == 0 || Columns == 0)

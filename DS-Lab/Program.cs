@@ -59,22 +59,14 @@ public static class Program
         var rarefiedMatrix = new RarefiedMatrix();
         
         rarefiedMatrix.FromDefaultMatrix(ExtensionsMethods.GetRandomMatrix(3, 5));
-        
-        Console.WriteLine(rarefiedMatrix);
-        rarefiedMatrix.ToDefaultMatrix().Print();
-        
-        rarefiedMatrix.SetValue(0, 1, 11, 11);
-        Console.WriteLine(rarefiedMatrix);
-        Console.WriteLine();
-        rarefiedMatrix.ToDefaultMatrix().Print();
-        Console.WriteLine();
-        
-        rarefiedMatrix.Resize(5,5);
-        rarefiedMatrix.SetValue(0, 0, 11, 0);
-        //rarefiedMatrix.SetValue(0, 1, 11, 0);
-        rarefiedMatrix *= 0;
-        rarefiedMatrix *= 2;
 
+        Console.WriteLine(rarefiedMatrix);
+        Console.WriteLine();
+        rarefiedMatrix.ToDefaultMatrix().Print();
+        
+        rarefiedMatrix.Transpose();
+        rarefiedMatrix.SetValue(4, 2, 11, 11);
+        
         Console.WriteLine(rarefiedMatrix);
         Console.WriteLine();
         rarefiedMatrix.ToDefaultMatrix().Print();

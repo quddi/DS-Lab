@@ -6,4 +6,9 @@
     
     public RarefiedMatrixNode? RightNode { get; set; }
     public RarefiedMatrixNode? DownNode { get; set; }
+
+    public void SwapNextNodes()
+    {
+        (RightNode, DownNode) = (DownNode, RightNode);
+    }
 }
