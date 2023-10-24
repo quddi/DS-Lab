@@ -19,7 +19,7 @@ public static class ExtensionsMethods
     {
         if (value is int i)
         {
-            return i / 10 == 0 ? string.Format($" {i}") : i.ToString();
+            return i > 0 && i / 10 == 0 ? string.Format($" {i}") : i.ToString();
         }
 
         if (value is string str)
@@ -75,7 +75,7 @@ public static class ExtensionsMethods
         return false;
     }
 
-    public static int[,] GetRandomMatrix(int rows, int columns, int minValue = -99, int maxValue = 99)
+    public static int[,] GetRandomMatrix(int rows, int columns, int minValue = -9, int maxValue = 49)
     {
         var result = new int[rows, columns];
 

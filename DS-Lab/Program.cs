@@ -11,6 +11,9 @@ public static class Program
     private static readonly SkipList<int, string> SkipList = new();
     private static SkipList<int, string> SkipListCopy;
 
+    private static RarefiedMatrix FirstRarefiedMatrix = new();
+    private static readonly RarefiedMatrix SecondRarefiedMatrix = new();
+
     public static void Main()
     {
         //TestDeque();
@@ -19,62 +22,228 @@ public static class Program
         
         //TestSkipList();
         
-        TestRarefiedMatrixManually();
+        TestRarefiedMatrix();
+    }
+
+    private static void TestRarefiedMatrix()
+    {
+        while (true)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\nFirst matrix:\n{FirstRarefiedMatrix}");
+            FirstRarefiedMatrix.ToDefaultMatrix().Print();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"\nSecond matrix:\n{SecondRarefiedMatrix}");
+            SecondRarefiedMatrix.ToDefaultMatrix().Print();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nChoose an operation:");
+            Console.WriteLine("1. First matrix: generate");
+            Console.WriteLine("2. Second matrix: generate");
+            Console.WriteLine("3. First matrix: set value");
+            Console.WriteLine("4. First matrix: get value");
+            Console.WriteLine("5. First matrix: resize");
+            Console.WriteLine("6. First matrix: transpose");
+            Console.WriteLine("7. First matrix: multiplying per value");
+            Console.WriteLine("8. First & second matrix: sum");
+            Console.WriteLine("9. Exit");
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            int input1, input2, input3, input4;
+            
+            if (!int.TryParse(Console.ReadLine(), out var choice) || choice is < 1 or > 9)
+            {
+                Console.WriteLine("Invalid input. Please enter the operation number.");
+                continue;
+            }
+
+            if (choice == 1)
+            {
+                Console.Write("Input rows amount: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input1) || input1 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                Console.Write("Input columns amount: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input2) || input2 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                FirstRarefiedMatrix.FromDefaultMatrix(ExtensionsMethods.GetRandomMatrix(input1, input2));
+            }
+            else if (choice == 2)
+            {
+                Console.Write("Input rows amount: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input1) || input1 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                Console.Write("Input columns amount: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input2) || input2 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                SecondRarefiedMatrix.FromDefaultMatrix(ExtensionsMethods.GetRandomMatrix(input1, input2));
+            }
+            else if (choice == 3)
+            {
+                Console.Write("Input row: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input1) || input1 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                Console.Write("Input column: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input2) || input2 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                Console.Write("Input key: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input3))
+                {
+                    Console.WriteLine("It must be an integer number");
+                    continue;
+                }
+                
+                Console.Write("Input value: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input4))
+                {
+                    Console.WriteLine("It must be an integer number");
+                    continue;
+                }
+
+                try
+                {
+                    FirstRarefiedMatrix.SetValue(input1, input2, input3, input4);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Caught an exception! Message: {ex.Message}");
+                }
+            }
+            else if (choice == 4)
+            {
+                Console.Write("Input row: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input1) || input1 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                Console.Write("Input column: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input2) || input2 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                try
+                {
+                    Console.WriteLine($"FirstMatrix[{input1}, {input2}]: {FirstRarefiedMatrix.GetValue(input1, input2)}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Caught an exception! Message: {ex.Message}");
+                }
+            }
+            else if (choice == 5)
+            {
+                Console.Write("Input rows amount: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input1) || input1 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                Console.Write("Input columns amount: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input2) || input2 is < 0 or > 10)
+                {
+                    Console.WriteLine("It must be an integer number, from [0, 10]");
+                    continue;
+                }
+                
+                FirstRarefiedMatrix.Resize(input1, input2);
+                Console.WriteLine("Resized!");
+            }
+            else if (choice == 6)
+            {
+                FirstRarefiedMatrix.Transpose();
+                Console.WriteLine("Transposed!");
+            }
+            else if (choice == 7)
+            {
+                Console.Write("Enter a value to multiply by: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input1))
+                {
+                    Console.WriteLine("It must be an integer number");
+                    continue;
+                }
+
+                FirstRarefiedMatrix *= input1;
+            }
+            else if (choice == 8)
+            {
+                try
+                {
+                    var newMatrix = FirstRarefiedMatrix + SecondRarefiedMatrix;
+
+                    Console.WriteLine($"Sum matrix:\n{newMatrix}");
+                    newMatrix.ToDefaultMatrix().Print();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Caught an exception. Message: {ex.Message}");
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
     }
 
     private static void TestRarefiedMatrixManually()
     {
-        /*var node1 = new RarefiedMatrixNode { Key = 1, Value = 1 };
-        var node2 = new RarefiedMatrixNode { Key = 2, Value = 2 };
-        var node3 = new RarefiedMatrixNode { Key = 3, Value = 3 };
-        var node4 = new RarefiedMatrixNode { Key = 4, Value = 4 };
-        var node7 = new RarefiedMatrixNode { Key = 7, Value = 7 };
-        var node8 = new RarefiedMatrixNode { Key = 8, Value = 8 };
-        var node9 = new RarefiedMatrixNode { Key = 9, Value = 9 };
-
-        node1.RightNode = node2;
-        node3.RightNode = node8;
-        node4.RightNode = node7;
-        node7.RightNode = node9;
-
-        node3.DownNode = node4;
-        node1.DownNode = node3;
-        node2.DownNode = node9;
-
-        var upList = new List<RarefiedMatrixNode>();
+        var rarefiedMatrix1 = new RarefiedMatrix();
+        var rarefiedMatrix2 = new RarefiedMatrix();
         
-        upList.Add(node1);
-        upList.Add(node8);
-        upList.Add(node7);
-        upList.Add(node2);
+        rarefiedMatrix1.FromDefaultMatrix(ExtensionsMethods.GetRandomMatrix(3, 5));
+        rarefiedMatrix2.FromDefaultMatrix(ExtensionsMethods.GetRandomMatrix(3, 5));
 
-        var leftList = new List<RarefiedMatrixNode>();
+        Console.WriteLine(rarefiedMatrix1);
+        Console.WriteLine(rarefiedMatrix2);
+        rarefiedMatrix1.ToDefaultMatrix().Print();
+        rarefiedMatrix2.ToDefaultMatrix().Print();
         
-        leftList.Add(node1);
-        leftList.Add(node3);
-        leftList.Add(node4);
-
-        var rarefiedMatrix = new RarefiedMatrix(upList, leftList);*/
-
-        var rarefiedMatrix = new RarefiedMatrix();
-        
-        rarefiedMatrix.FromDefaultMatrix(ExtensionsMethods.GetRandomMatrix(3, 5));
-
-        Console.WriteLine(rarefiedMatrix);
         Console.WriteLine();
-        rarefiedMatrix.ToDefaultMatrix().Print();
+
+        var sumMatrix = rarefiedMatrix1 + rarefiedMatrix2;
         
-        rarefiedMatrix.Transpose();
-        rarefiedMatrix.SetValue(4, 2, 0, 0);
-        Console.WriteLine(rarefiedMatrix.GetValue(0, 0));
-        Console.WriteLine(rarefiedMatrix.GetValue(1, 0));
-        Console.WriteLine(rarefiedMatrix.GetValue(0, 1));
-        Console.WriteLine(rarefiedMatrix.GetValue(1, 1));
-        Console.WriteLine(rarefiedMatrix.GetValue(4, 2));
-        
-        Console.WriteLine(rarefiedMatrix);
-        Console.WriteLine();
-        rarefiedMatrix.ToDefaultMatrix().Print();
+        Console.WriteLine(sumMatrix);
+        sumMatrix.ToDefaultMatrix().Print();
     }
     
     private static void TestSkipList()

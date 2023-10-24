@@ -11,6 +11,8 @@ public class RarefiedMatrix
     public int Rows => _leftNodesList.Count;
     public int Columns => _upNodesList.Count;
 
+    public bool IsEmpty => Rows == 0 || Columns == 0;
+
     public int this[int row, int column]
     {
         get => GetValue(row, column);
@@ -19,8 +21,9 @@ public class RarefiedMatrix
     
     public RarefiedMatrix(int rows = 0, int columns = 0)
     {
-        _leftNodesList = new(rows);
-        _upNodesList = new(columns);
+        _upNodesList = new();
+        _leftNodesList = new();
+        Resize(rows, columns);
     }
 
     public RarefiedMatrix(List<RarefiedMatrixNode> upNodesList, List<RarefiedMatrixNode> leftNodesList)
@@ -31,10 +34,13 @@ public class RarefiedMatrix
 
     public int GetValue(int row, int column)
     {
+        if (IsEmpty)
+            throw new InvalidOperationException("The matrix is empty!");
+        
         if (row >= Rows || row < 0)
             throw new ArgumentException($"Row parameter was {row} but must be [0; {Rows - 1}]");
         
-        if (column >= Columns)
+        if (column >= Columns || column < 0)
             throw new ArgumentException($"Column parameter was {column} but must be [0; {Columns - 1}]");
         
         var nextUpNodes = new List<RarefiedMatrixNode>(_upNodesList);
@@ -383,5 +389,26 @@ public class RarefiedMatrix
         }
 
         return rarefiedMatrix;
+    }
+
+    public static RarefiedMatrix operator +(RarefiedMatrix firstMatrix, RarefiedMatrix secondMatrix)
+    {
+        if (firstMatrix.Rows != secondMatrix.Rows || firstMatrix.Columns != secondMatrix.Columns)
+            throw new ArgumentException($"Matrix dimensions must be the same, but was: 1: [{firstMatrix.Rows}, {firstMatrix.Columns}] 2: [{secondMatrix.Rows}, {secondMatrix.Columns}]");
+
+        var rows = firstMatrix.Rows;
+        var columns = firstMatrix.Columns;
+
+        var resultMatrix = new RarefiedMatrix(rows, columns);
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int column = 0; column < columns; column++)
+            {
+                resultMatrix.SetValue(row, column, row + rows * column, firstMatrix[row, column] + secondMatrix[row, column]);
+            }
+        }
+
+        return resultMatrix;
     }
 }
