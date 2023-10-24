@@ -97,6 +97,7 @@ public static class ExtensionsMethods
                     randomValue = Random.Next(minValue, maxValue + 1);
 
                 result[i, j] = randomValue;
+                usedValues.Add(randomValue);
             }
         }
 

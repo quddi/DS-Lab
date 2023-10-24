@@ -10,6 +10,12 @@ public class RarefiedMatrix
 
     public int Rows => _leftNodesList.Count;
     public int Columns => _upNodesList.Count;
+
+    public int this[int row, int column]
+    {
+        get => GetValue(row, column);
+        set => SetValue(row, column, value, value);
+    }
     
     public RarefiedMatrix(int rows = 0, int columns = 0)
     {
@@ -23,6 +29,63 @@ public class RarefiedMatrix
         _leftNodesList = leftNodesList;
     }
 
+    public int GetValue(int row, int column)
+    {
+        if (row >= Rows || row < 0)
+            throw new ArgumentException($"Row parameter was {row} but must be [0; {Rows - 1}]");
+        
+        if (column >= Columns)
+            throw new ArgumentException($"Column parameter was {column} but must be [0; {Columns - 1}]");
+        
+        var nextUpNodes = new List<RarefiedMatrixNode>(_upNodesList);
+        
+        for (int currentRow = 0; currentRow < _leftNodesList.Count; currentRow++)
+        {
+            RarefiedMatrixNode nextLeftNode = _leftNodesList[currentRow];
+            
+            for (int currentColumn = 0; currentColumn < _upNodesList.Count; currentColumn++)
+            {
+                if (currentColumn == column && currentRow == row)
+                {
+                    if (nextLeftNode != null && 
+                        nextUpNodes[currentColumn] != null && 
+                        nextLeftNode.Key == nextUpNodes[currentColumn].Key)
+                    {
+                        return nextLeftNode.Value;
+                    }
+
+                    return 0;
+                }
+
+                if (currentRow == row && nextLeftNode == null)
+                {
+                    nextUpNodes[currentColumn] = nextUpNodes[currentColumn]?.DownNode;
+                    
+                    continue;
+                }
+
+                if (currentColumn == column && nextUpNodes[currentColumn] == null)
+                {
+                    nextLeftNode = nextLeftNode?.RightNode;
+                    
+                    continue;
+                }
+                
+                if (nextLeftNode == null || nextUpNodes[currentColumn] == null) 
+                    continue;
+                
+                if (nextLeftNode.Key == nextUpNodes[currentColumn].Key)
+                {
+                    nextLeftNode = nextLeftNode.RightNode;
+
+                    nextUpNodes[currentColumn] = nextUpNodes[currentColumn].DownNode;
+                }
+            }
+        }
+
+        throw new InvalidOperationException();
+    }
+    
     public void SetValue(int row, int column, int key, int value)
     {
         if (row >= Rows || row < 0)

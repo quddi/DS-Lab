@@ -65,7 +65,12 @@ public static class Program
         rarefiedMatrix.ToDefaultMatrix().Print();
         
         rarefiedMatrix.Transpose();
-        rarefiedMatrix.SetValue(4, 2, 11, 11);
+        rarefiedMatrix.SetValue(4, 2, 0, 0);
+        Console.WriteLine(rarefiedMatrix.GetValue(0, 0));
+        Console.WriteLine(rarefiedMatrix.GetValue(1, 0));
+        Console.WriteLine(rarefiedMatrix.GetValue(0, 1));
+        Console.WriteLine(rarefiedMatrix.GetValue(1, 1));
+        Console.WriteLine(rarefiedMatrix.GetValue(4, 2));
         
         Console.WriteLine(rarefiedMatrix);
         Console.WriteLine();
