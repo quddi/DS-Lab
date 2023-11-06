@@ -41,6 +41,8 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="BinomialHeap\BinomialHeap.cs" />
+        <Compile Include="BinomialHeap\BinomialHeapNode.cs" />
         <Compile Include="Deque\Deque.cs" />
         <Compile Include="Deque\DequeNode.cs" />
         <Compile Include="Extensions\Constants.cs" />
