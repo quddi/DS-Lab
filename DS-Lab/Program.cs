@@ -22,7 +22,48 @@ public static class Program
         
         //TestSkipList();
         
-        TestRarefiedMatrix();
+        //TestRarefiedMatrix();
+        
+        TestBinomialHeapManually();
+    }
+
+    private static void TestBinomialHeapManually()
+    {
+        var node15 = new BinomialHeapNode { Key = 15, Value = 15, Degree = 0 };
+        var node14 = new BinomialHeapNode { Key = 14, Value = 14, Degree = 0 };
+        var node13 = new BinomialHeapNode { Key = 13, Value = 13, Degree = 1 };
+        var node12 = new BinomialHeapNode { Key = 12, Value = 12, Degree = 0 };
+        var node11 = new BinomialHeapNode { Key = 11, Value = 11, Degree = 0 };
+        var node10 = new BinomialHeapNode { Key = 10, Value = 10, Degree = 1 };
+        var node9 = new BinomialHeapNode { Key = 9, Value = 9, Degree = 2 };
+        var node8 = new BinomialHeapNode { Key = 8, Value = 8, Degree = 3 };
+        var node7 = new BinomialHeapNode { Key = 7, Value = 7, Degree = 0 };
+        var node6 = new BinomialHeapNode { Key = 6, Value = 6, Degree = 1 };
+        var node5 = new BinomialHeapNode { Key = 5, Value = 5, Degree = 0 };
+        var node4 = new BinomialHeapNode { Key = 4, Value = 4, Degree = 0 };
+        var node3 = new BinomialHeapNode { Key = 3, Value = 3, Degree = 2 };
+        var node2 = new BinomialHeapNode { Key = 2, Value = 2, Degree = 1 };
+        var node1 = new BinomialHeapNode { Key = 1, Value = 1, Degree = 0 };
+
+        node15.Sibling = node13;
+
+        node13.Child = node14;
+        node13.Sibling = node9;
+
+        node9.Child = node10;
+        node10.Sibling = node11;
+        node10.Child = node12;
+        node9.Sibling = node8;
+        
+        node8.Child = node3;
+        node3.Sibling = node6;
+        node6.Sibling = node7;
+        node3.Child = node2;
+        node2.Sibling = node4;
+        node2.Child = node1;
+        node6.Child = node5;
+        
+        Console.WriteLine(new BinomialHeap(node15));
     }
 
     private static void TestRarefiedMatrix()

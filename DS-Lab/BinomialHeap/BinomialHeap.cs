@@ -3,7 +3,12 @@
 public class BinomialHeap
 {
     private BinomialHeapNode? _firstTreeRoot;
-    
+
+    public BinomialHeap(BinomialHeapNode? firstTreeRoot)
+    {
+        _firstTreeRoot = firstTreeRoot;
+    }
+
     public override string ToString()
     {
         if (_firstTreeRoot == null)
@@ -11,9 +16,18 @@ public class BinomialHeap
         
         var stringBuilder = new StringBuilder();
 
-        while (_firstTreeRoot != null)
+        var currentSubTreeRoot = _firstTreeRoot;
+        
+        while (currentSubTreeRoot != null)
         {
+            var isLastTree = currentSubTreeRoot.Sibling == null;
             
+            stringBuilder.Append(currentSubTreeRoot.ToString(isLastTree));
+
+            if (!isLastTree)
+                stringBuilder.Append("|\n|\n");
+
+            currentSubTreeRoot = currentSubTreeRoot.Sibling;
         }
         
         return stringBuilder.ToString();
