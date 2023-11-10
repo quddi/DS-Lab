@@ -12,6 +12,11 @@ public class BinomialHeap
         _firstTreeRoot = firstTreeRoot;
     }
 
+    public BinomialHeapNode? GetNode(int data)
+    {
+        return GetNode(_firstTreeRoot, data);
+    }
+    
     public int? GetMin()
     {
         if (_firstTreeRoot == null) return null;
@@ -82,7 +87,19 @@ public class BinomialHeap
         return minValueNode.Data;
     }
 
-    public void DecreaseData(BinomialHeapNode node, int targetData)
+    public bool TryDecreaseData(int currentData, int targetData)
+    {
+        var containingNode = GetNode(currentData);
+
+        if (containingNode == null)
+            return false; 
+        
+        DecreaseData(containingNode, targetData);
+
+        return true;
+    }
+    
+    private void DecreaseData(BinomialHeapNode node, int targetData)
     {
         if (node.Data < targetData)
             throw new InvalidOperationException($"The node data was already lower than target! ({node.Data} < {targetData})");
@@ -99,6 +116,19 @@ public class BinomialHeap
             firstNode = secondNode;
             secondNode = firstNode.Parent;
         }
+    }
+
+    public bool TryDelete(int data)
+    {
+        var containingNode = GetNode(data);
+
+        if (containingNode == null)
+            return false; 
+        
+        DecreaseData(containingNode, int.MinValue);
+        SnatchMin();
+
+        return true;
     }
 
     public void MergeWith(BinomialHeap secondaryHeap)
@@ -210,5 +240,21 @@ public class BinomialHeap
         }
         
         return stringBuilder.ToString();
+    }
+
+    private static BinomialHeapNode? GetNode(BinomialHeapNode? node, int data)
+    {
+        if (node == null)
+            return null;
+        
+        if (node.Data == data) 
+            return node;
+
+        if (node.Child == null && node.Sibling == null)
+            return null;
+
+        var gotFromChild = GetNode(node.Child, data);
+
+        return gotFromChild ?? GetNode(node.Sibling, data);
     }
 }

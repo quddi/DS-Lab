@@ -78,8 +78,9 @@ public static class Program
         //Console.WriteLine(binomialHeap2);
         
         //binomialHeap1.MergeWith(binomialHeap2);
-        Console.WriteLine(binomialHeap1.SnatchMin());
-
+        //binomialHeap1.Delete(new BinomialHeapNode {Data = 8});
+        binomialHeap1.TryDelete(8);
+        
         Console.WriteLine(binomialHeap1);
     }
 
