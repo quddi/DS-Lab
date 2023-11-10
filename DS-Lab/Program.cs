@@ -45,16 +45,16 @@ public static class Program
         var node2 = new BinomialHeapNode { Key = 2, Value = 2, Degree = 1 };
         var node1 = new BinomialHeapNode { Key = 1, Value = 1, Degree = 0 };
 
-        node15.Sibling = node13;
+        node15.Sibling = node9;
 
-        node13.Child = node14;
-        node13.Sibling = node9;
+        /*node13.Child = node14;
+        node13.Sibling = node9;*/
 
         node9.Child = node10;
         node10.Sibling = node11;
         node10.Child = node12;
-        node9.Sibling = node8;
         
+        //node9.Sibling = node8;
         node8.Child = node3;
         node3.Sibling = node6;
         node6.Sibling = node7;
@@ -62,8 +62,16 @@ public static class Program
         node2.Sibling = node4;
         node2.Child = node1;
         node6.Child = node5;
+
+        var node39 = new BinomialHeapNode { Degree = 0, Key = 39, Value = 39 };
+
+        var binomialHeap1 = new BinomialHeap(node15);
+        var binomialHeap2 = new BinomialHeap(node8);
+        Console.WriteLine(binomialHeap2);
         
-        Console.WriteLine(new BinomialHeap(node15));
+        binomialHeap2.MergeWith(binomialHeap1);
+        
+        Console.WriteLine(binomialHeap2);
     }
 
     private static void TestRarefiedMatrix()

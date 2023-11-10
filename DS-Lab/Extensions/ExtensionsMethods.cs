@@ -102,5 +102,5 @@ public static class ExtensionsMethods
         }
 
         return result;
-    } 
+    }
 }
