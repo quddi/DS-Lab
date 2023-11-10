@@ -47,14 +47,14 @@ public static class Program
 
         node15.Sibling = node9;
 
-        /*node13.Child = node14;
-        node13.Sibling = node9;*/
+        node13.Child = node14;
+        node13.Sibling = node9;
 
         node9.Child = node10;
         node10.Sibling = node11;
         node10.Child = node12;
         
-        //node9.Sibling = node8;
+        node9.Sibling = node8;
         node8.Child = node3;
         node3.Sibling = node6;
         node6.Sibling = node7;
@@ -63,15 +63,23 @@ public static class Program
         node2.Child = node1;
         node6.Child = node5;
 
-        var node39 = new BinomialHeapNode { Degree = 0, Key = 39, Value = 39 };
+        var node18 = new BinomialHeapNode { Key = 18, Value = 18, Degree = 2 };
+        var node20 = new BinomialHeapNode { Key = 20, Value = 20, Degree = 1 };
+        var node22 = new BinomialHeapNode { Key = 22, Value = 22, Degree = 0 };
+        var node24 = new BinomialHeapNode { Key = 24, Value = 24, Degree = 0 };
+
+        node18.Child = node20;
+        node20.Child = node24;
+        node20.Sibling = node22;
 
         var binomialHeap1 = new BinomialHeap(node15);
-        var binomialHeap2 = new BinomialHeap(node8);
+        var binomialHeap2 = new BinomialHeap(node18);
+        Console.WriteLine(binomialHeap1);
         Console.WriteLine(binomialHeap2);
         
-        binomialHeap2.MergeWith(binomialHeap1);
-        
-        Console.WriteLine(binomialHeap2);
+        binomialHeap1.MergeWith(binomialHeap2);
+
+        Console.WriteLine(binomialHeap1);
     }
 
     private static void TestRarefiedMatrix()

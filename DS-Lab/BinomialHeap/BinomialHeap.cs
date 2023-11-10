@@ -21,7 +21,7 @@ public class BinomialHeap
 
         while (currentNode != null)
         {
-            minValue = Math.Min(currentNode.Value, minValue);
+            minValue = Math.Min(currentNode.Key, minValue);
 
             currentNode = currentNode.Sibling;
         }
@@ -54,6 +54,41 @@ public class BinomialHeap
     }
 
     public void MergeWith(BinomialHeap secondaryHeap)
+    {
+        MergeTreesList(secondaryHeap);
+
+        BinomialHeapNode? previous = null;
+        BinomialHeapNode? current = _firstTreeRoot!;
+        BinomialHeapNode? next = _firstTreeRoot!.Sibling;
+
+        while (next != null)
+        {
+            if (current.Degree != next.Degree || (next.Sibling != null && next.Sibling.Degree == current.Degree))
+            {
+                previous = current;
+                current = next;
+            }
+            else if (current.Key <= next.Key)
+            {
+                current.Sibling = next.Sibling;
+                LinkTrees(next, current);
+            }
+            else
+            {
+                if (previous == null)
+                    _firstTreeRoot = next;
+                else
+                    previous.Sibling = next;
+
+                LinkTrees(current, next);
+                current = next;
+            }
+
+            next = current.Sibling;
+        }
+    }
+
+    private void MergeTreesList(BinomialHeap secondaryHeap)
     {
         var primaryCurrentNode = _firstTreeRoot;
         var secondaryCurrentNode = secondaryHeap._firstTreeRoot;
@@ -92,5 +127,16 @@ public class BinomialHeap
         secondaryHeap._firstTreeRoot = null;
 
         _firstTreeRoot = list.First();
+    }
+
+    private static void LinkTrees(BinomialHeapNode child, BinomialHeapNode parent)
+    {
+        if (child.Degree != parent.Degree)
+            throw new ArgumentException($"Linked trees must have the same degree, but they was: {child.Degree} and {parent.Degree}!");
+        
+        child.Parent = parent;
+        child.Sibling = parent.Child;
+        parent.Child = child;
+        parent.Degree++;
     }
 }
