@@ -78,9 +78,7 @@ public static class Program
         //Console.WriteLine(binomialHeap2);
         
         //binomialHeap1.MergeWith(binomialHeap2);
-        binomialHeap1.Insert(11, 11);
-        binomialHeap1.Insert(10, 10);
-        binomialHeap1.Insert(5, 5);
+        Console.WriteLine(binomialHeap1.SnatchMin());
 
         Console.WriteLine(binomialHeap1);
     }

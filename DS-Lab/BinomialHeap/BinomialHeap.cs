@@ -41,6 +41,48 @@ public class BinomialHeap
         MergeWith(new BinomialHeap(node));
     }
 
+    public int? SnatchMin()
+    {
+        if (_firstTreeRoot == null) return null;
+
+        BinomialHeapNode? currentNode = _firstTreeRoot;
+        BinomialHeapNode? minValueNode = new BinomialHeapNode { Key = int.MaxValue, Value = Int32.MaxValue};
+        BinomialHeapNode? minValueNodePrevious = null;
+        BinomialHeapNode? previous = null;
+
+        while (currentNode != null)
+        {
+            if (currentNode.Key < minValueNode.Key)
+            {
+                minValueNode = currentNode;
+                minValueNodePrevious = previous;
+            }
+
+            previous = currentNode;
+            currentNode = currentNode.Sibling;
+        }
+
+        if (minValueNodePrevious != null)
+            minValueNodePrevious.Sibling = minValueNode.Sibling;
+        else
+            _firstTreeRoot = minValueNode.Sibling;
+
+        BinomialHeapNode child = minValueNode.Child;
+        previous = null;
+
+        while (child != null)
+        {
+            var sibling = child.Sibling;
+            child.Sibling = previous;
+            previous = child;
+            child = sibling;
+        }
+        
+        MergeWith(new BinomialHeap(previous));
+
+        return minValueNode.Key;
+    }
+
     public void MergeWith(BinomialHeap secondaryHeap)
     {
         MergeTreesList(secondaryHeap);
