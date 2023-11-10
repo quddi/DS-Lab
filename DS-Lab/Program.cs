@@ -63,21 +63,24 @@ public static class Program
         node2.Child = node1;
         node6.Child = node5;
 
-        var node18 = new BinomialHeapNode { Key = 18, Value = 18, Degree = 2 };
+        /*var node18 = new BinomialHeapNode { Key = 18, Value = 18, Degree = 2 };
         var node20 = new BinomialHeapNode { Key = 20, Value = 20, Degree = 1 };
         var node22 = new BinomialHeapNode { Key = 22, Value = 22, Degree = 0 };
         var node24 = new BinomialHeapNode { Key = 24, Value = 24, Degree = 0 };
 
         node18.Child = node20;
         node20.Child = node24;
-        node20.Sibling = node22;
+        node20.Sibling = node22;*/
 
         var binomialHeap1 = new BinomialHeap(node15);
-        var binomialHeap2 = new BinomialHeap(node18);
+        //var binomialHeap2 = new BinomialHeap(node18);
         Console.WriteLine(binomialHeap1);
-        Console.WriteLine(binomialHeap2);
+        //Console.WriteLine(binomialHeap2);
         
-        binomialHeap1.MergeWith(binomialHeap2);
+        //binomialHeap1.MergeWith(binomialHeap2);
+        binomialHeap1.Insert(11, 11);
+        binomialHeap1.Insert(10, 10);
+        binomialHeap1.Insert(5, 5);
 
         Console.WriteLine(binomialHeap1);
     }

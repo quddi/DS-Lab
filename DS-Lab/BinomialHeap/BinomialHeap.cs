@@ -29,28 +29,16 @@ public class BinomialHeap
         return minValue;
     }
 
-    public override string ToString()
+    public void Insert(int key, int value)
     {
-        if (_firstTreeRoot == null)
-            return "Empty binomial heap."; 
-        
-        var stringBuilder = new StringBuilder();
-
-        var currentSubTreeRoot = _firstTreeRoot;
-        
-        while (currentSubTreeRoot != null)
+        var node = new BinomialHeapNode
         {
-            var isLastTree = currentSubTreeRoot.Sibling == null;
-            
-            stringBuilder.Append(currentSubTreeRoot.ToString(isLastTree));
-
-            if (!isLastTree)
-                stringBuilder.Append("|\n|\n");
-
-            currentSubTreeRoot = currentSubTreeRoot.Sibling;
-        }
+            Key = key,
+            Value = value,
+            Degree = 0
+        };
         
-        return stringBuilder.ToString();
+        MergeWith(new BinomialHeap(node));
     }
 
     public void MergeWith(BinomialHeap secondaryHeap)
@@ -138,5 +126,29 @@ public class BinomialHeap
         child.Sibling = parent.Child;
         parent.Child = child;
         parent.Degree++;
+    }
+
+    public override string ToString()
+    {
+        if (_firstTreeRoot == null)
+            return "Empty binomial heap."; 
+        
+        var stringBuilder = new StringBuilder();
+
+        var currentSubTreeRoot = _firstTreeRoot;
+        
+        while (currentSubTreeRoot != null)
+        {
+            var isLastTree = currentSubTreeRoot.Sibling == null;
+            
+            stringBuilder.Append(currentSubTreeRoot.ToString(isLastTree));
+
+            if (!isLastTree)
+                stringBuilder.Append("|\n|\n");
+
+            currentSubTreeRoot = currentSubTreeRoot.Sibling;
+        }
+        
+        return stringBuilder.ToString();
     }
 }
