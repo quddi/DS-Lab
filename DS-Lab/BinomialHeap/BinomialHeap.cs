@@ -21,7 +21,7 @@ public class BinomialHeap
 
         while (currentNode != null)
         {
-            minValue = Math.Min(currentNode.Key, minValue);
+            minValue = Math.Min(currentNode.Data, minValue);
 
             currentNode = currentNode.Sibling;
         }
@@ -29,12 +29,11 @@ public class BinomialHeap
         return minValue;
     }
 
-    public void Insert(int key, int value)
+    public void Insert(int data)
     {
         var node = new BinomialHeapNode
         {
-            Key = key,
-            Value = value,
+            Data = data,
             Degree = 0
         };
         
@@ -46,13 +45,13 @@ public class BinomialHeap
         if (_firstTreeRoot == null) return null;
 
         BinomialHeapNode? currentNode = _firstTreeRoot;
-        BinomialHeapNode? minValueNode = new BinomialHeapNode { Key = int.MaxValue, Value = Int32.MaxValue};
+        BinomialHeapNode? minValueNode = new BinomialHeapNode { Data = int.MaxValue };
         BinomialHeapNode? minValueNodePrevious = null;
         BinomialHeapNode? previous = null;
 
         while (currentNode != null)
         {
-            if (currentNode.Key < minValueNode.Key)
+            if (currentNode.Data < minValueNode.Data)
             {
                 minValueNode = currentNode;
                 minValueNodePrevious = previous;
@@ -80,7 +79,26 @@ public class BinomialHeap
         
         MergeWith(new BinomialHeap(previous));
 
-        return minValueNode.Key;
+        return minValueNode.Data;
+    }
+
+    public void DecreaseData(BinomialHeapNode node, int targetData)
+    {
+        if (node.Data < targetData)
+            throw new InvalidOperationException($"The node data was already lower than target! ({node.Data} < {targetData})");
+
+        node.Data = targetData;
+
+        BinomialHeapNode? firstNode = node;
+        BinomialHeapNode? secondNode = firstNode.Parent;
+
+        while (secondNode != null && firstNode.Data < secondNode.Data)
+        {
+            (firstNode.Data, secondNode.Data) = (secondNode.Data, firstNode.Data);
+
+            firstNode = secondNode;
+            secondNode = firstNode.Parent;
+        }
     }
 
     public void MergeWith(BinomialHeap secondaryHeap)
@@ -98,7 +116,7 @@ public class BinomialHeap
                 previous = current;
                 current = next;
             }
-            else if (current.Key <= next.Key)
+            else if (current.Data <= next.Data)
             {
                 current.Sibling = next.Sibling;
                 LinkTrees(next, current);

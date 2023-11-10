@@ -4,10 +4,8 @@ using System.Text;
 
 public class BinomialHeapNode
 {
-    public int Key { get; set; }
-    
-    public int Value { get; set; }
-    
+    public int Data { get; set; }
+
     public int Degree { get; set; }
 
     public BinomialHeapNode? Parent { get; set; }
@@ -29,7 +27,7 @@ public class BinomialHeapNode
         for (int i = 0; i < level; i++)
             stringBuilder.Append(levelsForStick.Contains(maxDegree - i) ? "|   " : "    ");
         
-        stringBuilder.Append(node.Value);
+        stringBuilder.Append(node.Data);
 
         if (node.Child != null) 
             stringBuilder.Append("---▼");
