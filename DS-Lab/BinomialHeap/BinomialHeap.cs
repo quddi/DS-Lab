@@ -7,16 +7,44 @@ public class BinomialHeap
 {
     private BinomialHeapNode? _firstTreeRoot;
 
-    public BinomialHeap(BinomialHeapNode? firstTreeRoot)
+    public BinomialHeap(BinomialHeapNode? firstTreeRoot = null)
     {
         _firstTreeRoot = firstTreeRoot;
+    }
+
+    public bool Contains(int data)
+    {
+        return GetNode(data) != null;
     }
 
     public BinomialHeapNode? GetNode(int data)
     {
         return GetNode(_firstTreeRoot, data);
     }
-    
+
+    public (int DecimalElementsCount, int BinaryElementsCount, int TreesCount) GetSize()
+    {
+        if (_firstTreeRoot == null)
+            return (0, 0, 0);
+
+        int standardSum = 0;
+        int binarySum = 0;
+        int treesSum = 0;
+
+        var current = _firstTreeRoot;
+
+        while (current != null)
+        {
+            standardSum += (int)Math.Pow(2, current.Degree);
+            binarySum +=  (int)Math.Pow(10, current.Degree);
+            treesSum++;
+
+            current = current.Sibling;
+        }
+
+        return (standardSum, binarySum, treesSum);
+    }
+
     public int? GetMin()
     {
         if (_firstTreeRoot == null) return null;
@@ -41,7 +69,7 @@ public class BinomialHeap
             Data = data,
             Degree = 0
         };
-        
+
         MergeWith(new BinomialHeap(node));
     }
 
@@ -133,6 +161,15 @@ public class BinomialHeap
 
     public void MergeWith(BinomialHeap secondaryHeap)
     {
+        if (secondaryHeap._firstTreeRoot == null) 
+            return;
+
+        if (_firstTreeRoot == null)
+        {
+            _firstTreeRoot = secondaryHeap._firstTreeRoot;
+            return;
+        }
+        
         MergeTreesList(secondaryHeap);
 
         BinomialHeapNode? previous = null;

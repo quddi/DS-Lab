@@ -14,6 +14,8 @@ public static class Program
     private static RarefiedMatrix FirstRarefiedMatrix = new();
     private static readonly RarefiedMatrix SecondRarefiedMatrix = new();
 
+    private static BinomialHeap BinomialHeap = new();
+
     public static void Main()
     {
         //TestDeque();
@@ -24,10 +26,83 @@ public static class Program
         
         //TestRarefiedMatrix();
         
-        TestBinomialHeapManually();
+        ShowBinomialHeapExample();
+        
+        //TestBinomialHeap();
     }
 
-    private static void TestBinomialHeapManually()
+    private static void TestBinomialHeap()
+    {
+        while (true)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\nBinomial heap:\n{BinomialHeap}");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nChoose an operation:");
+            Console.WriteLine("1. Insert a value");
+            Console.WriteLine("2. Remove a value");
+            Console.WriteLine("3. Get elements and tree counts");
+            Console.WriteLine("4. Exit");
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            int input1;
+            
+            if (!int.TryParse(Console.ReadLine(), out var choice) || choice is < 1 or > 4)
+            {
+                Console.WriteLine("Invalid input. Please enter the operation number.");
+                continue;
+            }
+
+            if (choice == 1)
+            {
+                Console.Write("Input a value to insert: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input1))
+                {
+                    Console.WriteLine("Bad input, try again!");
+                    continue;
+                }
+
+                if (BinomialHeap.Contains(input1))
+                {
+                    Console.WriteLine("The binomial heap already contains the inputted value, try again!");
+                    continue;
+                }
+                
+                BinomialHeap.Insert(input1);
+            }
+            else if (choice == 2)
+            {
+                Console.Write("Input a value to remove: ");
+
+                if (!int.TryParse(Console.ReadLine(), out input1))
+                {
+                    Console.WriteLine("Bad input, try again!");
+                    continue;
+                }
+
+                if (!BinomialHeap.Contains(input1))
+                {
+                    Console.WriteLine("The binomial heap does not contain the inputted value, try again!");
+                    continue;
+                }
+                
+                BinomialHeap.TryDelete(input1);
+            }
+            else if (choice == 3)
+            {
+                var heapInfo = BinomialHeap.GetSize();
+                
+                Console.WriteLine($"Elements count:\nIn decimal:\t{heapInfo.DecimalElementsCount}\nIn binary:\t{heapInfo.BinaryElementsCount}\nTrees count:\t{heapInfo.TreesCount}");
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+
+    private static void ShowBinomialHeapExample()
     {
         var node15 = new BinomialHeapNode { Data = 15, Degree = 0 };
         var node14 = new BinomialHeapNode { Data = 14, Degree = 0 };
@@ -62,26 +137,8 @@ public static class Program
         node2.Sibling = node4;
         node2.Child = node1;
         node6.Child = node5;
-
-        /*var node18 = new BinomialHeapNode { Data = 18 18, Degree = 2 };
-        var node20 = new BinomialHeapNode { Data = 20 20, Degree = 1 };
-        var node22 = new BinomialHeapNode { Data = 22 22, Degree = 0 };
-        var node24 = new BinomialHeapNode { Data = 24 24, Degree = 0 };
-
-        node18.Child = node20;
-        node20.Child = node24;
-        node20.Sibling = node22;*/
-
-        var binomialHeap1 = new BinomialHeap(node15);
-        //var binomialHeap2 = new BinomialHeap(node18);
-        Console.WriteLine(binomialHeap1);
-        //Console.WriteLine(binomialHeap2);
         
-        //binomialHeap1.MergeWith(binomialHeap2);
-        //binomialHeap1.Delete(new BinomialHeapNode {Data = 8});
-        binomialHeap1.TryDelete(8);
-        
-        Console.WriteLine(binomialHeap1);
+        Console.WriteLine(new BinomialHeap(node15));
     }
 
     private static void TestRarefiedMatrix()
